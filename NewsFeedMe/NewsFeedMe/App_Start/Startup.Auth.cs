@@ -2,6 +2,7 @@
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
+using System.Threading.Tasks;
 using System.Web.Configuration;
 
 namespace NewsFeedMe.App_Start
@@ -19,9 +20,25 @@ namespace NewsFeedMe.App_Start
 
             app.SetDefaultSignInAsAuthenticationType(cookieOptions.AuthenticationType);
 
-            app.UseTwitterAuthentication(
-               consumerKey: WebConfigurationManager.AppSettings["TwitterKey"],
-               consumerSecret: WebConfigurationManager.AppSettings["TwitterSecret"]);
+            //app.UseTwitterAuthentication(
+            //   consumerKey: WebConfigurationManager.AppSettings["TwitterKey"],
+            //   consumerSecret: WebConfigurationManager.AppSettings["TwitterSecret"]);
+
+            var twitterOptions = new Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions
+            {
+                ConsumerKey = WebConfigurationManager.AppSettings["TwitterKey"],
+                ConsumerSecret = WebConfigurationManager.AppSettings["TwitterSecret"],
+                Provider = new Microsoft.Owin.Security.Twitter.TwitterAuthenticationProvider
+                {
+                    OnAuthenticated = (context) =>
+                    {
+                        context.Identity.AddClaim(new System.Security.Claims.Claim("urn:twitter:access_token", context.AccessToken, null, "Twitter"));
+                        context.Identity.AddClaim(new System.Security.Claims.Claim("urn:twitter:access_token_secret", context.AccessTokenSecret, null, "Twitter"));
+                        return Task.FromResult(0);
+                    }
+                }
+            };
+            app.UseTwitterAuthentication(twitterOptions);
         }
     }
 }

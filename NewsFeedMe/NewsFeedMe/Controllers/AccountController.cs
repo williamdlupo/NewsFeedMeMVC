@@ -27,7 +27,38 @@ namespace NewsFeedMe.Controllers
 
         public ActionResult ExternalLoginCallback(string returnUrl)
         {
-            return RedirectToAction("Index", "Home");
+            var claim = System.Security.Claims.ClaimsPrincipal.Current.Claims;
+
+            var oauthToken = claim.FirstOrDefault(x => x.Type.EndsWith("twitter:access_token")).Value;
+            var oauthSecret = claim.FirstOrDefault(x => x.Type.EndsWith("twitter:access_token_secret")).Value;
+
+            string Key = WebConfigurationManager.AppSettings["TwitterKey"];
+            string Secret = WebConfigurationManager.AppSettings["TwitterSecret"];
+            try
+            {
+                TwitterService service = new TwitterService(Key, Secret);
+
+                service.AuthenticateWith(oauthToken, oauthSecret);
+                VerifyCredentialsOptions option = new VerifyCredentialsOptions();
+
+                //According to Access Tokens get user profile details  
+                TwitterUser user = service.VerifyCredentials(option);
+
+                return RedirectToAction("Index", "Home");
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        //
+        // POST: /Account/LogOff
+        public ActionResult LogOff()
+        {
+            Session.RemoveAll();
+            AuthenticationManager.SignOut();
+            return RedirectToAction("Login");
         }
 
         // Implementation copied from a standard MVC Project, with some stuff
@@ -48,6 +79,14 @@ namespace NewsFeedMe.Controllers
             {
                 var properties = new AuthenticationProperties() { RedirectUri = RedirectUri };
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
+            }
+        }
+
+        private IAuthenticationManager AuthenticationManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().Authentication;
             }
         }
     }
