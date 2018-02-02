@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Owin.Security;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,50 +18,36 @@ namespace NewsFeedMe.Controllers
             return View();
         }
 
-        //
-        //Twitter authentication with TweetSharp
-        [HttpGet]
-        public ActionResult TwitterAuth()
+        public ActionResult TwitterAuth(string returnUrl)
         {
-            string Key = WebConfigurationManager.AppSettings["TwitterKey"];
-            string Secret = WebConfigurationManager.AppSettings["TwitterSecret"];
-            TwitterService service = new TwitterService(Key, Secret);
-
-            //Obtaining a request token  
-            OAuthRequestToken requestToken = service.GetRequestToken("https://localhost:44363/Account/TwitterCallback");
-            Uri uri = service.GetAuthenticationUrl(requestToken);
-
-            //Redirecting the user to Twitter  
-            return Redirect(uri.ToString());
+            // Request a redirect to the external login provider
+            return new ChallengeResult("Twitter",
+              Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
-        //
-        //Function to handle callback from Twitter once user has authenticated
-        public ActionResult TwitterCallback(string oauth_token, string oauth_verifier)
+        public ActionResult ExternalLoginCallback(string returnUrl)
         {
-            var requestToken = new OAuthRequestToken
+            return RedirectToAction("Index", "Home");
+        }
+
+        // Implementation copied from a standard MVC Project, with some stuff
+        // that relates to linking a new external login to an existing identity
+        // account removed.
+        private class ChallengeResult : HttpUnauthorizedResult
+        {
+            public ChallengeResult(string provider, string redirectUri)
             {
-                Token = oauth_token
-            };
-
-            string Key = WebConfigurationManager.AppSettings["TwitterKey"];
-            string Secret = WebConfigurationManager.AppSettings["TwitterSecret"];
-            try
-            {
-                TwitterService service = new TwitterService(Key, Secret);
-
-                //Get Access Tokens  
-                OAuthAccessToken accessToken = service.GetAccessToken(requestToken, oauth_verifier);
-                service.AuthenticateWith(accessToken.Token, accessToken.TokenSecret);
-                VerifyCredentialsOptions option = new VerifyCredentialsOptions();
-
-                //According to Access Tokens get user profile details  
-                TwitterUser user = service.VerifyCredentials(option);
-                return RedirectToAction("Index", "Home");
+                LoginProvider = provider;
+                RedirectUri = redirectUri;
             }
-            catch
+
+            public string LoginProvider { get; set; }
+            public string RedirectUri { get; set; }
+
+            public override void ExecuteResult(ControllerContext context)
             {
-                throw;
+                var properties = new AuthenticationProperties() { RedirectUri = RedirectUri };
+                context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
     }
