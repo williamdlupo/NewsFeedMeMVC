@@ -29,7 +29,7 @@ namespace NewsFeedMe.Controllers
         {
             var claim = System.Security.Claims.ClaimsPrincipal.Current.Claims;
 
-            var oauthToken = claim.FirstOrDefault(x => x.Type.EndsWith("twitter:access_token")).Value;
+           var oauthToken = claim.FirstOrDefault(x => x.Type.EndsWith("twitter:access_token")).Value;
             var oauthSecret = claim.FirstOrDefault(x => x.Type.EndsWith("twitter:access_token_secret")).Value;
 
             string Key = WebConfigurationManager.AppSettings["TwitterKey"];
@@ -41,10 +41,17 @@ namespace NewsFeedMe.Controllers
                 service.AuthenticateWith(oauthToken, oauthSecret);
                 VerifyCredentialsOptions option = new VerifyCredentialsOptions();
 
-                //According to Access Tokens get user profile details  
+                //Use Access Tokens to access user Twitter data  
                 TwitterUser user = service.VerifyCredentials(option);
 
-                return RedirectToAction("Index", "Home");
+                //To Do:
+                //- Determine if user already exists; if so, forward to Feed
+
+                //- If user does not exist, add them to DB here and forward to Content page
+                Session["Username"] = user.ScreenName;
+                Session["ProfilePicture"] = user.ProfileImageUrl;
+
+                return RedirectToAction("Content", "Manage");
             }
             catch
             {
