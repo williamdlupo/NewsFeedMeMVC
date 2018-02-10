@@ -13,16 +13,13 @@ namespace NewsFeedMe.App_Start
         {
             var cookieOptions = new CookieAuthenticationOptions
             {
-                LoginPath = new PathString("/Account/Login")
+                LoginPath = new PathString("/Account/Login"),
+                ExpireTimeSpan = System.TimeSpan.FromMinutes(10)
             };
 
             app.UseCookieAuthentication(cookieOptions);
 
             app.SetDefaultSignInAsAuthenticationType(cookieOptions.AuthenticationType);
-
-            //app.UseTwitterAuthentication(
-            //   consumerKey: WebConfigurationManager.AppSettings["TwitterKey"],
-            //   consumerSecret: WebConfigurationManager.AppSettings["TwitterSecret"]);
 
             var twitterOptions = new Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions
             {
