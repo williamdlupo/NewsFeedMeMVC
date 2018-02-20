@@ -36,14 +36,7 @@
                         <span class="sr-only"></span>
                         <span class="fa fa-bars large"></span>
                     </button>
-                    <div class="col-sm-offset-10">
-                        <div class="row">
-                            <div class="profile-userpic">
-                                <img src="@String.Format("{0}", Session["ProfilePicture"])" class="img-responsive" alt="">
-                            </div>
-                            <h3 class="profile-usertitle-name text-primary"> @String.Format("{0}", Session["Username"])</h3>
-                        </div>
-                    </div>
+                    @Html.Partial("_LoginPartial")
                 </div>
             </div>
         </nav>

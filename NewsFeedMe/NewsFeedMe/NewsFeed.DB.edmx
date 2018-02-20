@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="NewsFeed.DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Access_Token" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Secret" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ExternalService" Type="nvarchar" MaxLength="50" />
+          <Property Name="ScreenName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProfilePictureURL" Type="nvarchar" MaxLength="128" />
+        </EntityType>
+        <EntityType Name="User_Interest">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="CategoryID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PublisherID" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_User_Interest_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User_Interest" Type="Self.User_Interest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User_Interest">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="InsertUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="AccessToken" Type="nvarchar" Mode="In" />
+          <Parameter Name="Secret" Type="nvarchar" Mode="In" />
+          <Parameter Name="Service" Type="nvarchar" Mode="In" />
+          <Parameter Name="ScreenName" Type="nvarchar" Mode="In" />
+          <Parameter Name="ProfilePic" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="InsertUser_Interest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="CategoryID" Type="nvarchar" Mode="In" />
+          <Parameter Name="PublisherID" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="NewsFeedDBModelStoreContainer">
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_Interest" EntityType="Self.User_Interest" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_User_Interest_User" Association="Self.FK_User_Interest_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="User_Interest" EntitySet="User_Interest" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="NewsFeed.DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Access_Token" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Secret" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ExternalService" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ScreenName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProfilePictureURL" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User_Interest" Relationship="Self.FK_User_Interest_User" FromRole="User" ToRole="User_Interest" />
+        </EntityType>
+        <EntityType Name="User_Interest">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="CategoryID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PublisherID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User" Relationship="Self.FK_User_Interest_User" FromRole="User_Interest" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_User_Interest_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User_Interest" Type="Self.User_Interest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User_Interest">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EntityFramework" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="User_Interest" EntityType="Self.User_Interest" />
+          <AssociationSet Name="FK_User_Interest_User" Association="Self.FK_User_Interest_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="User_Interest" EntitySet="User_Interest" />
+          </AssociationSet>
+          <FunctionImport Name="InsertUser">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="AccessToken" Mode="In" Type="String" />
+            <Parameter Name="Secret" Mode="In" Type="String" />
+            <Parameter Name="Service" Mode="In" Type="String" />
+            <Parameter Name="ScreenName" Mode="In" Type="String" />
+            <Parameter Name="ProfilePic" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertUser_Interest">
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="CategoryID" Mode="In" Type="String" />
+            <Parameter Name="PublisherID" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="NewsFeedDBModelStoreContainer" CdmEntityContainer="EntityFramework">
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="NewsFeed.DBModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Access_Token" ColumnName="Access_Token" />
+                <ScalarProperty Name="Secret" ColumnName="Secret" />
+                <ScalarProperty Name="ExternalService" ColumnName="ExternalService" />
+                <ScalarProperty Name="ScreenName" ColumnName="ScreenName" />
+                <ScalarProperty Name="ProfilePictureURL" ColumnName="ProfilePictureURL" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="NewsFeed.DBModel.User">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="NewsFeed.DBModel.Store.InsertUser">
+                  <ScalarProperty Name="ProfilePictureURL" ParameterName="ProfilePic" />
+                  <ScalarProperty Name="ExternalService" ParameterName="Service" />
+                  <ScalarProperty Name="Access_Token" ParameterName="AccessToken" />
+                  <ScalarProperty Name="ScreenName" ParameterName="ScreenName" />
+                  <ScalarProperty Name="Secret" ParameterName="Secret" />
+                  <ScalarProperty Name="Id" ParameterName="Id" />
+                </InsertFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_Interest">
+            <EntityTypeMapping TypeName="NewsFeed.DBModel.User_Interest">
+              <MappingFragment StoreEntitySet="User_Interest">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="PublisherID" ColumnName="PublisherID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="NewsFeed.DBModel.User_Interest">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="NewsFeed.DBModel.Store.InsertUser_Interest">
+                  <ScalarProperty Name="PublisherID" ParameterName="PublisherID" />
+                  <ScalarProperty Name="CategoryID" ParameterName="CategoryID" />
+                  <ScalarProperty Name="UserID" ParameterName="UserID" />
+                </InsertFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="InsertUser" FunctionName="NewsFeed.DBModel.Store.InsertUser" />
+          <FunctionImportMapping FunctionImportName="InsertUser_Interest" FunctionName="NewsFeed.DBModel.Store.InsertUser_Interest" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

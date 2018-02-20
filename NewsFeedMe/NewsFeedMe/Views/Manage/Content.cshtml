@@ -4,9 +4,30 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Content</h2>
+@if (ViewBag.Message != null)
+{
+    <div class="row">
+        <div class="alert alert-success container-fluid col-md-4 col-md-offset-4" role="alert">
+            <div class="text-center">
+                <b>Great! </b><span>@ViewBag.Message</span>
+            </div>
+        </div>
+    </div>
 
-<h5>This page will act to get new users to follow content and allow existing users to update content they follow.</h5>
+}
+<div class="container-fluid">
+    <div class="row">
+        <h2>Content</h2>
 
-<text>This is a test to see if continuous delivery has been added successfully.</text>
+        <h5>This page will allow new users to select content to follow and allow existing users to update content they currently follow.</h5>
+        <br />  
+        <div class="row">
+            <div class="col-sm-1 col-sm-offset-5">
+                <a href="@Url.Action("TestContent", "Manage", new { contentID = "science", publisherID = ""})" role="button" class="btn btn-success pull-left" title="Test Content"><span class="fa fa-bolt"></span> Save Test Content</a>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
 

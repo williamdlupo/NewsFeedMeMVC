@@ -1,6 +1,6 @@
 ﻿using Microsoft.Owin.Security;
 using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Linq;
 using System.Web;
 using System.Web.Configuration;
@@ -15,47 +15,77 @@ namespace NewsFeedMe.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
+            ViewBag.Message = TempData["result"] as string;
+            ViewBag.errorMessage = TempData["error"] as string;
             return View();
         }
 
         public ActionResult TwitterAuth(string returnUrl)
         {
-            // Request a redirect to the external login provider
+            // Request a redirect to the external challenge class
             return new ChallengeResult("Twitter",
               Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
-        public ActionResult ExternalLoginCallback(string returnUrl)
+        public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             var claim = System.Security.Claims.ClaimsPrincipal.Current.Claims;
-
-           var oauthToken = claim.FirstOrDefault(x => x.Type.EndsWith("twitter:access_token")).Value;
-            var oauthSecret = claim.FirstOrDefault(x => x.Type.EndsWith("twitter:access_token_secret")).Value;
-
-            string Key = WebConfigurationManager.AppSettings["TwitterKey"];
-            string Secret = WebConfigurationManager.AppSettings["TwitterSecret"];
-            try
+            
+            using (var context = new EntityFramework())
             {
-                TwitterService service = new TwitterService(Key, Secret);
+                try
+                {
+                    int userid = Convert.ToInt32(claim.FirstOrDefault(x => x.Type.EndsWith("twitter:userid")).Value);
+                    
+                    var userstatus = from db in context.Users
+                                     where db.Id == userid
+                                     select new { db.ScreenName, db.ProfilePictureURL };
+                    
+                    //Determine if user already exists - if not, create the user
+                    if (userstatus.Count() == 0)
+                    {
+                        var oauthToken = claim.FirstOrDefault(x => x.Type.EndsWith("twitter:access_token")).Value;
+                        var oauthSecret = claim.FirstOrDefault(x => x.Type.EndsWith("twitter:access_token_secret")).Value;
 
-                service.AuthenticateWith(oauthToken, oauthSecret);
-                VerifyCredentialsOptions option = new VerifyCredentialsOptions();
+                        string Key = WebConfigurationManager.AppSettings["TwitterKey"];
+                        string Secret = WebConfigurationManager.AppSettings["TwitterSecret"];
 
-                //Use Access Tokens to access user Twitter data  
-                TwitterUser user = service.VerifyCredentials(option);
+                        try
+                        {
+                            TwitterService service = new TwitterService(Key, Secret);
 
-                //To Do:
-                //- Determine if user already exists; if so, forward to Feed
+                            service.AuthenticateWith(oauthToken, oauthSecret);
+                            VerifyCredentialsOptions option = new VerifyCredentialsOptions();
 
-                //- If user does not exist, add them to DB here and forward to Content page
-                Session["Username"] = user.ScreenName;
-                Session["ProfilePicture"] = user.ProfileImageUrl;
+                            //Use Access Tokens to access user Twitter data  
+                            TwitterUser twitterdata = service.VerifyCredentials(option);
 
-                return RedirectToAction("Content", "Manage");
-            }
-            catch
-            {
-                throw;
+                            //load twitter user data into User class
+                            var user = new User { Id = Convert.ToInt32(twitterdata.Id), Access_Token = oauthToken, Secret = oauthSecret, ExternalService = "Twitter", ScreenName = twitterdata.ScreenName.ToString(), ProfilePictureURL = twitterdata.ProfileImageUrlHttps };
+
+
+                            //new user is saved to DB with EntityFramework
+                            var result = context.Users.Add(user);
+                            await context.SaveChangesAsync();
+
+                            Session["ProfilePicture"] = user.ProfilePictureURL;
+
+                            TempData["result"] = "You're all signed up!";
+                            return RedirectToAction("Content", "Manage");
+                        }
+
+                        //something went wrong, throw error and redirect back to login page.
+                        catch
+                        {
+                            TempData["error"] = "Something went wrong";
+                            return RedirectToAction("LogOff");
+                        }
+                    }
+
+                    Session["ProfilePicture"] = userstatus.FirstOrDefault().ProfilePictureURL;
+                    return RedirectToAction("Home", "Feed");
+                }
+                catch { throw; }
             }
         }
 
