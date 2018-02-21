@@ -12,13 +12,13 @@ namespace NewsFeedMe
     using System;
     using System.Collections.Generic;
     
-    public partial class User_Interest
+    public partial class User_Category
     {
         public int Id { get; set; }
         public int UserID { get; set; }
-        public string CategoryID { get; set; }
-        public string PublisherID { get; set; }
+        public int CategoryID { get; set; }
     
+        public virtual Category Category { get; set; }
         public virtual User User { get; set; }
     }
 }

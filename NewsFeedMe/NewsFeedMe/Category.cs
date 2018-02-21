@@ -12,25 +12,19 @@ namespace NewsFeedMe
     using System;
     using System.Collections.Generic;
     
-    public partial class User
+    public partial class Category
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public User()
+        public Category()
         {
             this.User_Category = new HashSet<User_Category>();
-            this.User_Publisher = new HashSet<User_Publisher>();
         }
     
-        public int Id { get; set; }
-        public string Access_Token { get; set; }
-        public string Secret { get; set; }
-        public string ExternalService { get; set; }
-        public string ScreenName { get; set; }
-        public string ProfilePictureURL { get; set; }
+        public int ID { get; set; }
+        public string CID { get; set; }
+        public string Country { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User_Category> User_Category { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User_Publisher> User_Publisher { get; set; }
     }
 }

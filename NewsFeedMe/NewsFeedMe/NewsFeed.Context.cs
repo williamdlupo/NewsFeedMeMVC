@@ -27,8 +27,11 @@ namespace NewsFeedMe
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Publisher> Publishers { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<User_Interest> User_Interest { get; set; }
+        public virtual DbSet<User_Category> User_Category { get; set; }
+        public virtual DbSet<User_Publisher> User_Publisher { get; set; }
     
         public virtual int InsertUser(Nullable<int> id, string accessToken, string secret, string service, string screenName, string profilePic)
         {
@@ -59,21 +62,51 @@ namespace NewsFeedMe
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertUser", idParameter, accessTokenParameter, secretParameter, serviceParameter, screenNameParameter, profilePicParameter);
         }
     
-        public virtual int InsertUser_Interest(Nullable<int> userID, string categoryID, string publisherID)
+        public virtual int InsertUser_Category(Nullable<int> userID, Nullable<int> categoryID)
         {
             var userIDParameter = userID.HasValue ?
                 new ObjectParameter("UserID", userID) :
                 new ObjectParameter("UserID", typeof(int));
     
-            var categoryIDParameter = categoryID != null ?
+            var categoryIDParameter = categoryID.HasValue ?
                 new ObjectParameter("CategoryID", categoryID) :
-                new ObjectParameter("CategoryID", typeof(string));
+                new ObjectParameter("CategoryID", typeof(int));
     
-            var publisherIDParameter = publisherID != null ?
-                new ObjectParameter("PublisherID", publisherID) :
-                new ObjectParameter("PublisherID", typeof(string));
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertUser_Category", userIDParameter, categoryIDParameter);
+        }
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertUser_Interest", userIDParameter, categoryIDParameter, publisherIDParameter);
+        public virtual int Seed_Category(string cID, string country)
+        {
+            var cIDParameter = cID != null ?
+                new ObjectParameter("CID", cID) :
+                new ObjectParameter("CID", typeof(string));
+    
+            var countryParameter = country != null ?
+                new ObjectParameter("Country", country) :
+                new ObjectParameter("Country", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Seed_Category", cIDParameter, countryParameter);
+        }
+    
+        public virtual int Seed_Publisher(string pID, string name, string description, string uRL)
+        {
+            var pIDParameter = pID != null ?
+                new ObjectParameter("PID", pID) :
+                new ObjectParameter("PID", typeof(string));
+    
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var uRLParameter = uRL != null ?
+                new ObjectParameter("URL", uRL) :
+                new ObjectParameter("URL", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Seed_Publisher", pIDParameter, nameParameter, descriptionParameter, uRLParameter);
         }
     }
 }

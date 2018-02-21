@@ -1,0 +1,398 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="NewsFeed.DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Country" Type="nvarchar" MaxLength="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Publisher">
+          <Key>
+            <PropertyRef Name="PID" />
+          </Key>
+          <Property Name="PID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="URL" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Access_Token" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Secret" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ExternalService" Type="nvarchar" MaxLength="50" />
+          <Property Name="ScreenName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProfilePictureURL" Type="nvarchar" MaxLength="128" />
+        </EntityType>
+        <EntityType Name="User_Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="CategoryID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User_Publisher">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="PublisherID" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_User_Category_Category">
+          <End Role="Category" Type="Self.Category" Multiplicity="1" />
+          <End Role="User_Category" Type="Self.User_Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="User_Category">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Category_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User_Category" Type="Self.User_Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User_Category">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Publisher_Publisher1">
+          <End Role="Publisher" Type="Self.Publisher" Multiplicity="1" />
+          <End Role="User_Publisher" Type="Self.User_Publisher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publisher">
+              <PropertyRef Name="PID" />
+            </Principal>
+            <Dependent Role="User_Publisher">
+              <PropertyRef Name="PublisherID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Publisher_User">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="User_Publisher" Type="Self.User_Publisher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User_Publisher">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="InsertUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="AccessToken" Type="nvarchar" Mode="In" />
+          <Parameter Name="Secret" Type="nvarchar" Mode="In" />
+          <Parameter Name="Service" Type="nvarchar" Mode="In" />
+          <Parameter Name="ScreenName" Type="nvarchar" Mode="In" />
+          <Parameter Name="ProfilePic" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="InsertUser_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="CategoryID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Seed_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CID" Type="nvarchar" Mode="In" />
+          <Parameter Name="Country" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="Seed_Publisher" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PID" Type="nvarchar" Mode="In" />
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="URL" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="NewsFeedDBModelStoreContainer">
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Publisher" EntityType="Self.Publisher" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_Category" EntityType="Self.User_Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User_Publisher" EntityType="Self.User_Publisher" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_User_Category_Category" Association="Self.FK_User_Category_Category">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="User_Category" EntitySet="User_Category" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Category_User" Association="Self.FK_User_Category_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="User_Category" EntitySet="User_Category" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Publisher_Publisher1" Association="Self.FK_User_Publisher_Publisher1">
+            <End Role="Publisher" EntitySet="Publisher" />
+            <End Role="User_Publisher" EntitySet="User_Publisher" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Publisher_User" Association="Self.FK_User_Publisher_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="User_Publisher" EntitySet="User_Publisher" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="NewsFeed.DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="EntityFramework" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="InsertUser">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="AccessToken" Mode="In" Type="String" />
+            <Parameter Name="Secret" Mode="In" Type="String" />
+            <Parameter Name="Service" Mode="In" Type="String" />
+            <Parameter Name="ScreenName" Mode="In" Type="String" />
+            <Parameter Name="ProfilePic" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="InsertUser_Category">
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="CategoryID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Seed_Category">
+            <Parameter Name="CID" Mode="In" Type="String" />
+            <Parameter Name="Country" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="Seed_Publisher">
+            <Parameter Name="PID" Mode="In" Type="String" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="URL" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="Categories" EntityType="NewsFeed.DBModel.Category" />
+          <EntitySet Name="Publishers" EntityType="NewsFeed.DBModel.Publisher" />
+          <EntitySet Name="Users" EntityType="NewsFeed.DBModel.User" />
+          <EntitySet Name="User_Category" EntityType="NewsFeed.DBModel.User_Category" />
+          <EntitySet Name="User_Publisher" EntityType="NewsFeed.DBModel.User_Publisher" />
+          <AssociationSet Name="FK_User_Category_Category" Association="NewsFeed.DBModel.FK_User_Category_Category">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="User_Category" EntitySet="User_Category" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Publisher_Publisher1" Association="NewsFeed.DBModel.FK_User_Publisher_Publisher1">
+            <End Role="Publisher" EntitySet="Publishers" />
+            <End Role="User_Publisher" EntitySet="User_Publisher" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Category_User" Association="NewsFeed.DBModel.FK_User_Category_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="User_Category" EntitySet="User_Category" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Publisher_User" Association="NewsFeed.DBModel.FK_User_Publisher_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="User_Publisher" EntitySet="User_Publisher" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User_Category" Relationship="NewsFeed.DBModel.FK_User_Category_Category" FromRole="Category" ToRole="User_Category" />
+        </EntityType>
+        <EntityType Name="Publisher">
+          <Key>
+            <PropertyRef Name="PID" />
+          </Key>
+          <Property Name="PID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="URL" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User_Publisher" Relationship="NewsFeed.DBModel.FK_User_Publisher_Publisher1" FromRole="Publisher" ToRole="User_Publisher" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Access_Token" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Secret" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ExternalService" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ScreenName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProfilePictureURL" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="User_Category" Relationship="NewsFeed.DBModel.FK_User_Category_User" FromRole="User" ToRole="User_Category" />
+          <NavigationProperty Name="User_Publisher" Relationship="NewsFeed.DBModel.FK_User_Publisher_User" FromRole="User" ToRole="User_Publisher" />
+        </EntityType>
+        <EntityType Name="User_Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="NewsFeed.DBModel.FK_User_Category_Category" FromRole="User_Category" ToRole="Category" />
+          <NavigationProperty Name="User" Relationship="NewsFeed.DBModel.FK_User_Category_User" FromRole="User_Category" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User_Publisher">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="PublisherID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Publisher" Relationship="NewsFeed.DBModel.FK_User_Publisher_Publisher1" FromRole="User_Publisher" ToRole="Publisher" />
+          <NavigationProperty Name="User" Relationship="NewsFeed.DBModel.FK_User_Publisher_User" FromRole="User_Publisher" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_User_Category_Category">
+          <End Type="NewsFeed.DBModel.Category" Role="Category" Multiplicity="1" />
+          <End Type="NewsFeed.DBModel.User_Category" Role="User_Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="User_Category">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Publisher_Publisher1">
+          <End Type="NewsFeed.DBModel.Publisher" Role="Publisher" Multiplicity="1" />
+          <End Type="NewsFeed.DBModel.User_Publisher" Role="User_Publisher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publisher">
+              <PropertyRef Name="PID" />
+            </Principal>
+            <Dependent Role="User_Publisher">
+              <PropertyRef Name="PublisherID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Category_User">
+          <End Type="NewsFeed.DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="NewsFeed.DBModel.User_Category" Role="User_Category" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User_Category">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Publisher_User">
+          <End Type="NewsFeed.DBModel.User" Role="User" Multiplicity="1" />
+          <End Type="NewsFeed.DBModel.User_Publisher" Role="User_Publisher" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="User_Publisher">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="NewsFeedDBModelStoreContainer" CdmEntityContainer="EntityFramework">
+          <FunctionImportMapping FunctionImportName="InsertUser" FunctionName="NewsFeed.DBModel.Store.InsertUser" />
+          <FunctionImportMapping FunctionImportName="InsertUser_Category" FunctionName="NewsFeed.DBModel.Store.InsertUser_Category" />
+          <FunctionImportMapping FunctionImportName="Seed_Category" FunctionName="NewsFeed.DBModel.Store.Seed_Category" />
+          <FunctionImportMapping FunctionImportName="Seed_Publisher" FunctionName="NewsFeed.DBModel.Store.Seed_Publisher" />
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="NewsFeed.DBModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="CID" ColumnName="CID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Publishers">
+            <EntityTypeMapping TypeName="NewsFeed.DBModel.Publisher">
+              <MappingFragment StoreEntitySet="Publisher">
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PID" ColumnName="PID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="NewsFeed.DBModel.Publisher">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="NewsFeed.DBModel.Store.Seed_Publisher">
+                  <ScalarProperty Name="URL" ParameterName="URL" />
+                  <ScalarProperty Name="Description" ParameterName="Description" />
+                  <ScalarProperty Name="Name" ParameterName="Name" />
+                  <ScalarProperty Name="PID" ParameterName="PID" />
+                </InsertFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="NewsFeed.DBModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="ProfilePictureURL" ColumnName="ProfilePictureURL" />
+                <ScalarProperty Name="ScreenName" ColumnName="ScreenName" />
+                <ScalarProperty Name="ExternalService" ColumnName="ExternalService" />
+                <ScalarProperty Name="Secret" ColumnName="Secret" />
+                <ScalarProperty Name="Access_Token" ColumnName="Access_Token" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="NewsFeed.DBModel.User">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="NewsFeed.DBModel.Store.InsertUser">
+                  <ScalarProperty Name="ProfilePictureURL" ParameterName="ProfilePic" />
+                  <ScalarProperty Name="ExternalService" ParameterName="Service" />
+                  <ScalarProperty Name="Access_Token" ParameterName="AccessToken" />
+                  <ScalarProperty Name="ScreenName" ParameterName="ScreenName" />
+                  <ScalarProperty Name="Secret" ParameterName="Secret" />
+                  <ScalarProperty Name="Id" ParameterName="Id" />
+                </InsertFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_Category">
+            <EntityTypeMapping TypeName="NewsFeed.DBModel.User_Category">
+              <MappingFragment StoreEntitySet="User_Category">
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User_Publisher">
+            <EntityTypeMapping TypeName="NewsFeed.DBModel.User_Publisher">
+              <MappingFragment StoreEntitySet="User_Publisher">
+                <ScalarProperty Name="PublisherID" ColumnName="PublisherID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -15,6 +15,8 @@ namespace NewsFeedMe.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
+            if (Request.IsAuthenticated) { return RedirectToAction("Home", "Feed"); }
+
             ViewBag.Message = TempData["result"] as string;
             ViewBag.errorMessage = TempData["error"] as string;
             return View();
