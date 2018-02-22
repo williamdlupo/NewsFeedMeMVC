@@ -73,7 +73,7 @@ namespace NewsFeedMe.Controllers
                             Session["ProfilePicture"] = user.ProfilePictureURL;
 
                             TempData["result"] = "You're all signed up!";
-                            return RedirectToAction("Content", "Manage");
+                            return RedirectToAction("Following", "Manage");
                         }
 
                         //something went wrong, throw error and redirect back to login page.

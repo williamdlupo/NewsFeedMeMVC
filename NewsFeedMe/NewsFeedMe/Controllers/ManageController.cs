@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
+using NewsFeedMe.Models;
 
 namespace NewsFeedMe.Controllers
 {
@@ -15,10 +16,37 @@ namespace NewsFeedMe.Controllers
         private HttpClient client = new HttpClient();
 
         [HttpGet]
-        public ActionResult Content()
+        public ActionResult Following()
         {
             ViewBag.Message = TempData["result"] as string;
-            return View();
+
+            using (var context = new EntityFramework())
+            {
+                FollowingModel following = new FollowingModel
+                {
+                    //get list of all possible news sources and topics to follow
+                    AllSources = ((from pub in context.Set<Publisher>()
+                                   select new
+                                   {
+                                       pub.PID,
+                                       pub.Name,
+                                       pub.Description,
+                                       pub.URL
+                                   }).ToList()
+                                        .Select(x => new Publisher { PID = x.PID, Name = x.Name, Description = x.Description, URL = x.URL })).ToList(),
+                    AllTopics = ((from top in context.Set<Category>()
+                                  select new
+                                  {
+                                      top.CID,
+                                      top.Country
+                                  }).ToList()
+                                        .Select(x => new Category { CID = x.CID, Country = x.Country })).ToList()
+
+                    //get lists of currently followed sources and topics
+                };
+
+                return View(following);
+            }
         }
 
         public async Task<ActionResult> TestContent(string publisherID)
@@ -36,7 +64,7 @@ namespace NewsFeedMe.Controllers
                     await context.SaveChangesAsync();
 
                     TempData["result"] = "Content selection saved!";
-                    return RedirectToAction("Content");
+                    return RedirectToAction("Following");
                 }
                 catch { throw; }
             }
@@ -51,7 +79,7 @@ namespace NewsFeedMe.Controllers
         {
             return View();
         }
-        
+
         //seeds the publisher table with data with NewsAPI sources
         public async Task<ActionResult> SeedPublisher()
         {

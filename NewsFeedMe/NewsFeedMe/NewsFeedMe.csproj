@@ -282,7 +282,7 @@
     <Content Include="Views\Manage\Settings.cshtml" />
     <Content Include="Views\Manage\Bookmarks.cshtml" />
     <Content Include="Views\Feed\Home.cshtml" />
-    <Content Include="Views\Manage\Content.cshtml" />
+    <Content Include="Views\Manage\Following.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
