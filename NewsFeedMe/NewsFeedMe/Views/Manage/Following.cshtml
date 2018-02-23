@@ -30,8 +30,11 @@
     <br />
     <div class="row">
         <div class="col-md-offset-3 col-md-6 panel panel-body" role="alert" hidden="hidden" id="topicsWindow">
-            <b>Your Topics: <span class="chip" id="selectedTopics"></span></b>
-            <div class="pull-right btn btn-success">Save</div>
+            <div class="container-fluid">
+                <div class="row"><b>Your Topics: </b></div>
+                <div class="row col-lg-offset-1 col-lg-11"><b id="selectedTopics"></b></div>
+                <div class="row col-lg-12"><div class="pull-right btn btn-success">Save</div></div>
+            </div>
         </div>
     </div>
     <div class="container-fluid" id="Publishers">
@@ -44,12 +47,12 @@
                             <a href="@Model.AllSources[i].URL" class="pull-right" title="Launch @Model.AllSources[i].Name" target="_blank"><em class="fa fa-external-link large"></em></a>
                             <h3 class="card-title">@Model.AllSources[i].Name</h3>
                         </div>
-                            <div class="card-body">
-                                <p class="card-text">@Model.AllSources[i].Description.</p>
-                            </div>
-                            <div class="card-footer">
-                                <button class="btn btn-primary pull-right" id="@Model.AllSources[i].Name"><span class="fa fa-plus"></span></button>
-                            </div>
+                        <div class="card-body">
+                            <p class="card-text">@Model.AllSources[i].Description.</p>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary pull-right" name="@Model.AllSources[i].Name" id="@Model.AllSources[i].PID"><span class="fa fa-plus"></span></button>
+                        </div>
                     </div>
                 </div>
                 <div class="container-fluid col-sm-4">
@@ -58,12 +61,12 @@
                             <a href="@Model.AllSources[i+1].URL" class="pull-right" title="Launch @Model.AllSources[i+1].Name" target="_blank"><em class="fa fa-external-link large"></em></a>
                             <h3 class="card-title">@Model.AllSources[i + 1].Name</h3>
                         </div>
-                            <div class="card-body">
-                                <p class="card-text">@Model.AllSources[i + 1].Description.</p>
-                            </div>
-                            <div class="card-footer">
-                                <button class="btn btn-primary pull-right" id="@Model.AllSources[i+1].Name"><span class="fa fa-plus"></span></button>
-                            </div>
+                        <div class="card-body">
+                            <p class="card-text">@Model.AllSources[i + 1].Description.</p>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary pull-right" name="@Model.AllSources[i+1].Name" id="@Model.AllSources[i+1].PID"><span class="fa fa-plus"></span></button>
+                        </div>
                     </div>
                 </div> <div class="container-fluid col-sm-4">
                     <div class="card">
@@ -71,12 +74,12 @@
                             <a href="@Model.AllSources[i+2].URL" class="pull-right" title="Launch @Model.AllSources[i+2].Name" target="_blank"><em class="fa fa-external-link large"></em></a>
                             <h3 class="card-title">@Model.AllSources[i + 2].Name</h3>
                         </div>
-                            <div class="card-body">
-                                <p class="card-text">@Model.AllSources[i + 2].Description.</p>
-                            </div>
-                            <div class="card-footer">
-                                <button class="btn btn-primary pull-right" id="@Model.AllSources[i+2].Name"><span class="fa fa-plus"></span></button>
-                            </div>
+                        <div class="card-body">
+                            <p class="card-text">@Model.AllSources[i + 2].Description.</p>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary pull-right" name="@Model.AllSources[i+2].Name" id="@Model.AllSources[i+2].PID"><span class="fa fa-plus"></span></button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -93,11 +96,44 @@
 </div>
 <script type="text/javascript">
     $(function () {
+        var publisherList = [];
+        var topicList = [];
+        var idList = [];
+
         $('#Publishers button').click(function () {
             var id = $(this).attr('id');
-            $('#topicsWindow').show();
-            $('#selectedTopics').text(id)
-            $(this).removeClass('btn-primary').addClass('btn-success');
+            var name = $(this).attr('name');
+            var topic = { 'id': id, 'name': name };
+
+            if ($.inArray(id, idList) == -1) {
+                idList.push(id);
+                publisherList.push(topic);
+
+                $('#topicsWindow').show();
+                var chip = '<span class="chip" id=' + id + ' role="button">' + topic.name + '<span class="fa fa-times pull-right"></span></span>';
+
+                $('#selectedTopics').append(chip);
+                $(this).removeClass('btn-primary').addClass('btn-success');
+                $(this).find('span').removeClass('fa fa-plus').addClass('fa fa-check')
+            }
+            else {
+                idList = $.grep(idList, function (value) {
+                    return value != id;
+                });
+                publisherList = publisherList.filter(function (el) {
+                    return el.id !== id;
+                });
+
+                $('#selectedTopics').empty();
+                if (idList.length > 0) {
+                    for (var i = 0; i < idList.length; i++) {
+                        var chip = '<span class="chip" role="button">' + publisherList[i].name + '<span class="fa fa-times pull-right"></span></span>';
+                        $('#selectedTopics').append(chip);
+                    }
+                }
+                $(this).removeClass('btn-success').addClass('btn-primary');
+                $(this).find('span').removeClass('fa fa-check').addClass('fa fa-plus')
+            }
         });
     });
 </script>
