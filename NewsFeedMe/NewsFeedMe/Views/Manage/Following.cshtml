@@ -17,7 +17,7 @@
 
 }
 <div class="container">
-    <h3 class="text-capitalize text-center text-primary">Follow topics, news sources or whatever tickles your fancy</h3>
+    <h3 class="text-capitalize text-center h2">Follow topics, news sources or whatever tickles your fancy</h3>
     <div class="row">
         <div class="col-lg-6 col-lg-offset-3">
             <input id="searchbar" type="text" class="form-control" placeholder="Search" style="max-width:none">
@@ -31,14 +31,33 @@
     <div class="row">
         <div class="col-md-offset-3 col-md-6 panel panel-body" role="alert" hidden="hidden" id="topicsWindow">
             <div class="container-fluid">
-                <div class="row"><b>Your Topics: </b></div>
+                <div class="row"><b>You Follow: </b><div class="pull-right btn btn-success">Save</div></div>
+                <div class="row"><span class="text-danger" id="warning" hidden="hidden"><b>Woah!</b> You're not following anything. There must be <em>something</em> you're interested in</span></div>
                 <div class="row col-lg-offset-1 col-lg-11"><b id="selectedTopics"></b></div>
-                <div class="row col-lg-12"><div class="pull-right btn btn-success">Save</div></div>
             </div>
         </div>
     </div>
-    <div class="container-fluid" id="Publishers">
-        @for (int i = 0; i < Model.AllSources.Count; i += 3)
+    <br />
+    <div class="container-fluid">
+        <div class="row">
+            <div class=" col-md-12">
+                <div class="btn-group btn-group-lg btn-group-justified" role="group">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default" id="categorySwap"><span class="fa fa-list-ul large"></span><b class="h3"> Categories</b></button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary" id="newsSwap"><span class="fa fa-newspaper-o large"></span><b class="h3"> News Sources</b></button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default" id="customSwap"><span class="fa fa-edit large"></span><b class="h3"> Custom</b></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div class="container-fluid" id="Publishers">
+            @for (int i = 0; i < Model.AllSources.Count; i += 3)
         {
             <div class="row">
                 <div class="container-fluid col-sm-4">
@@ -83,15 +102,44 @@
                     </div>
                 </div>
             </div>
-        }
-    </div>
-    <div class="row">
-        <ul>
-            @foreach (var item in Model.AllTopics)
-            {
-                <li>@item.CID</li>
-            }
-        </ul>
+    }
+        </div>
+        <div class="container-fluid" id="Categories" hidden="hidden">
+            @for (int i = 0; i < Model.AllTopics.Count; i += 3)
+        {
+            <div class="row">
+                <div class="container-fluid col-sm-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title text-capitalize">@Model.AllTopics[i].CID</h3>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary pull-right" name="@Model.AllTopics[i].CID" id="@Model.AllTopics[i].CID"><span class="fa fa-plus"></span></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid col-sm-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title text-capitalize">@Model.AllTopics[i + 1].CID</h3>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary pull-right" name="@Model.AllTopics[i+1].CID" id="@Model.AllTopics[i+1].CID"><span class="fa fa-plus"></span></button>
+                        </div>
+                    </div>
+                </div> <div class="container-fluid col-sm-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title text-capitalize">@Model.AllTopics[i + 2].CID</h3>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary pull-right" name="@Model.AllTopics[i+2].CID" id="@Model.AllTopics[i+2].CID"><span class="fa fa-plus"></span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    }
+        </div>
     </div>
 </div>
 <script type="text/javascript">
@@ -110,7 +158,8 @@
                 publisherList.push(topic);
 
                 $('#topicsWindow').show();
-                var chip = '<span class="chip" id=' + id + ' role="button">' + topic.name + '<span class="fa fa-times pull-right"></span></span>';
+                $('#warning').hide();
+                var chip = '<span class="chip" id=' + id + ' role="button">' + topic.name + '</span>';
 
                 $('#selectedTopics').append(chip);
                 $(this).removeClass('btn-primary').addClass('btn-success');
@@ -127,13 +176,70 @@
                 $('#selectedTopics').empty();
                 if (idList.length > 0) {
                     for (var i = 0; i < idList.length; i++) {
-                        var chip = '<span class="chip" role="button">' + publisherList[i].name + '<span class="fa fa-times pull-right"></span></span>';
+                        var chip = '<span class="chip" role="button">' + publisherList[i].name + '</span>';
                         $('#selectedTopics').append(chip);
                     }
                 }
                 $(this).removeClass('btn-success').addClass('btn-primary');
                 $(this).find('span').removeClass('fa fa-check').addClass('fa fa-plus')
+                if (idList.length == 0) {
+                    $('#warning').show();
+                }
             }
+        });
+
+        $('#Categories button').click(function () {
+            var id = $(this).attr('id');
+            var name = $(this).attr('name');
+            var topic = { 'id': id, 'name': name };
+
+            if ($.inArray(id, idList) == -1) {
+                idList.push(id);
+                publisherList.push(topic);
+
+                $('#topicsWindow').show();
+                $('#warning').hide();
+                var chip = '<span class="chip" id=' + id + ' role="button">' + topic.name + '</span>';
+
+                $('#selectedTopics').append(chip);
+                $(this).removeClass('btn-primary').addClass('btn-success');
+                $(this).find('span').removeClass('fa fa-plus').addClass('fa fa-check')
+            }
+            else {
+                idList = $.grep(idList, function (value) {
+                    return value != id;
+                });
+                publisherList = publisherList.filter(function (el) {
+                    return el.id !== id;
+                });
+
+                $('#selectedTopics').empty();
+                if (idList.length > 0) {
+                    for (var i = 0; i < idList.length; i++) {
+                        var chip = '<span class="chip" role="button">' + publisherList[i].name + '</span>';
+                        $('#selectedTopics').append(chip);
+                    }
+                }
+                $(this).removeClass('btn-success').addClass('btn-primary');
+                $(this).find('span').removeClass('fa fa-check').addClass('fa fa-plus')
+                if (idList.length == 0) {
+                    $('#warning').show();
+                }
+            }
+        });
+
+        $('#categorySwap').click(function () {
+            $(this).removeClass('btn-default').addClass('btn-primary');
+            $('#newsSwap').removeClass('btn-primary').addClass('btn-default');
+            $('#Publishers').hide();
+            $('#Categories').show();
+        });
+
+        $('#newsSwap').click(function () {
+            $(this).removeClass('btn-default').addClass('btn-primary');
+            $('#categorySwap').removeClass('btn-primary').addClass('btn-default');
+            $('#Publishers').show();
+            $('#Categories').hide();
         });
     });
 </script>
