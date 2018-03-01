@@ -58,104 +58,103 @@
     <div id="content">
         <div class="container-fluid" id="Publishers">
             @for (int i = 0; i < Model.AllSources.Count; i += 3)
-        {
-            <div class="row">
-                <div class="container-fluid col-sm-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <a href="@Model.AllSources[i].URL" class="pull-right" title="Launch @Model.AllSources[i].Name" target="_blank"><em class="fa fa-external-link large"></em></a>
-                            <h3 class="card-title">@Model.AllSources[i].Name</h3>
+            {
+                <div class="row">
+                    <div class="container-fluid col-sm-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <a href="@Model.AllSources[i].URL" class="pull-right" title="Launch @Model.AllSources[i].Name" target="_blank"><em class="fa fa-external-link large"></em></a>
+                                <h3 class="card-title">@Model.AllSources[i].Name</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">@Model.AllSources[i].Description.</p>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary pull-right" name="@Model.AllSources[i].Name" id="@Model.AllSources[i].PID"><span class="fa fa-plus"></span></button>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text">@Model.AllSources[i].Description.</p>
+                    </div>
+                    <div class="container-fluid col-sm-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <a href="@Model.AllSources[i+1].URL" class="pull-right" title="Launch @Model.AllSources[i+1].Name" target="_blank"><em class="fa fa-external-link large"></em></a>
+                                <h3 class="card-title">@Model.AllSources[i + 1].Name</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">@Model.AllSources[i + 1].Description.</p>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary pull-right" name="@Model.AllSources[i+1].Name" id="@Model.AllSources[i+1].PID"><span class="fa fa-plus"></span></button>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <button class="btn btn-primary pull-right" name="@Model.AllSources[i].Name" id="@Model.AllSources[i].PID"><span class="fa fa-plus"></span></button>
+                    </div> <div class="container-fluid col-sm-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <a href="@Model.AllSources[i+2].URL" class="pull-right" title="Launch @Model.AllSources[i+2].Name" target="_blank"><em class="fa fa-external-link large"></em></a>
+                                <h3 class="card-title">@Model.AllSources[i + 2].Name</h3>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">@Model.AllSources[i + 2].Description.</p>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary pull-right" name="@Model.AllSources[i+2].Name" id="@Model.AllSources[i+2].PID"><span class="fa fa-plus"></span></button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="container-fluid col-sm-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <a href="@Model.AllSources[i+1].URL" class="pull-right" title="Launch @Model.AllSources[i+1].Name" target="_blank"><em class="fa fa-external-link large"></em></a>
-                            <h3 class="card-title">@Model.AllSources[i + 1].Name</h3>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">@Model.AllSources[i + 1].Description.</p>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-primary pull-right" name="@Model.AllSources[i+1].Name" id="@Model.AllSources[i+1].PID"><span class="fa fa-plus"></span></button>
-                        </div>
-                    </div>
-                </div> <div class="container-fluid col-sm-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <a href="@Model.AllSources[i+2].URL" class="pull-right" title="Launch @Model.AllSources[i+2].Name" target="_blank"><em class="fa fa-external-link large"></em></a>
-                            <h3 class="card-title">@Model.AllSources[i + 2].Name</h3>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">@Model.AllSources[i + 2].Description.</p>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-primary pull-right" name="@Model.AllSources[i+2].Name" id="@Model.AllSources[i+2].PID"><span class="fa fa-plus"></span></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    }
+            }
         </div>
         <div class="container-fluid" id="Categories" hidden="hidden">
             @for (int i = 0; i < Model.AllTopics.Count; i += 3)
-        {
-            <div class="row">
-                <div class="container-fluid col-sm-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title text-capitalize">@Model.AllTopics[i].CID</h3>
+            {
+                <div class="row">
+                    <div class="container-fluid col-sm-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title text-capitalize">@Model.AllTopics[i].CID</h3>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary pull-right" name="@Model.AllTopics[i].CID" id="@Model.AllTopics[i].CID"><span class="fa fa-plus"></span></button>
+                            </div>
                         </div>
-                        <div class="card-footer">
-                            <button class="btn btn-primary pull-right" name="@Model.AllTopics[i].CID" id="@Model.AllTopics[i].CID"><span class="fa fa-plus"></span></button>
+                    </div>
+                    <div class="container-fluid col-sm-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title text-capitalize">@Model.AllTopics[i + 1].CID</h3>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary pull-right" name="@Model.AllTopics[i+1].CID" id="@Model.AllTopics[i+1].CID"><span class="fa fa-plus"></span></button>
+                            </div>
+                        </div>
+                    </div> <div class="container-fluid col-sm-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title text-capitalize">@Model.AllTopics[i + 2].CID</h3>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-primary pull-right" name="@Model.AllTopics[i+2].CID" id="@Model.AllTopics[i+2].CID"><span class="fa fa-plus"></span></button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="container-fluid col-sm-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title text-capitalize">@Model.AllTopics[i + 1].CID</h3>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-primary pull-right" name="@Model.AllTopics[i+1].CID" id="@Model.AllTopics[i+1].CID"><span class="fa fa-plus"></span></button>
-                        </div>
-                    </div>
-                </div> <div class="container-fluid col-sm-4">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title text-capitalize">@Model.AllTopics[i + 2].CID</h3>
-                        </div>
-                        <div class="card-footer">
-                            <button class="btn btn-primary pull-right" name="@Model.AllTopics[i+2].CID" id="@Model.AllTopics[i+2].CID"><span class="fa fa-plus"></span></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-    }
+            }
         </div>
     </div>
 </div>
 <script type="text/javascript">
     $(function () {
-        var publisherList = [];
         var topicList = [];
         var idList = [];
 
         $('#Publishers button').click(function () {
             var id = $(this).attr('id');
             var name = $(this).attr('name');
-            var topic = { 'id': id, 'name': name };
+            var topic = { 'id': id, 'name': name, 'type': 'publisher' };
 
             if ($.inArray(id, idList) == -1) {
                 idList.push(id);
-                publisherList.push(topic);
+                topicList.push(topic);
 
                 $('#topicsWindow').show();
                 $('#warning').hide();
@@ -169,14 +168,14 @@
                 idList = $.grep(idList, function (value) {
                     return value != id;
                 });
-                publisherList = publisherList.filter(function (el) {
+                topicList = topicList.filter(function (el) {
                     return el.id !== id;
                 });
 
                 $('#selectedTopics').empty();
                 if (idList.length > 0) {
                     for (var i = 0; i < idList.length; i++) {
-                        var chip = '<span class="chip" role="button">' + publisherList[i].name + '</span>';
+                        var chip = '<span class="chip" role="button">' + topicList[i].name + '</span>';
                         $('#selectedTopics').append(chip);
                     }
                 }
@@ -191,11 +190,11 @@
         $('#Categories button').click(function () {
             var id = $(this).attr('id');
             var name = $(this).attr('name');
-            var topic = { 'id': id, 'name': name };
+            var topic = { 'id': id, 'name': name, 'type': 'category' };
 
             if ($.inArray(id, idList) == -1) {
                 idList.push(id);
-                publisherList.push(topic);
+                topicList.push(topic);
 
                 $('#topicsWindow').show();
                 $('#warning').hide();
@@ -209,14 +208,14 @@
                 idList = $.grep(idList, function (value) {
                     return value != id;
                 });
-                publisherList = publisherList.filter(function (el) {
+                topicList = topicList.filter(function (el) {
                     return el.id !== id;
                 });
 
                 $('#selectedTopics').empty();
                 if (idList.length > 0) {
                     for (var i = 0; i < idList.length; i++) {
-                        var chip = '<span class="chip" role="button">' + publisherList[i].name + '</span>';
+                        var chip = '<span class="chip" role="button">' + topicList[i].name + '</span>';
                         $('#selectedTopics').append(chip);
                     }
                 }

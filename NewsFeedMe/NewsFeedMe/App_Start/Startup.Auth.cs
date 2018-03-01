@@ -13,8 +13,7 @@ namespace NewsFeedMe.App_Start
         {
             var cookieOptions = new CookieAuthenticationOptions
             {
-                LoginPath = new PathString("/Account/Login"),
-                ExpireTimeSpan = System.TimeSpan.FromMinutes(10)
+                LoginPath = new PathString("/Account/Login")
             };
 
             app.UseCookieAuthentication(cookieOptions);
