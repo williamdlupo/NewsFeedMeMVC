@@ -13,6 +13,8 @@ namespace NewsFeedMe.App_Start
         {
             var cookieOptions = new CookieAuthenticationOptions
             {
+                SlidingExpiration = true,
+                ExpireTimeSpan = System.TimeSpan.FromMinutes(10),
                 LoginPath = new PathString("/Account/Login")
             };
 
