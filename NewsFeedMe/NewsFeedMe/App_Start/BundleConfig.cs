@@ -26,7 +26,8 @@ namespace NewsFeedMe
                       "~/Content/bootstrap.css",
                       "~/Content/site.css",
                       "~/Content/font-awesome.min.css",
-                      "~/Content/theme.css"));
+                      "~/Content/theme.css",
+                      "~/Content/spectre.css"));
 
             BundleTable.EnableOptimizations = true;
         }
