@@ -109,6 +109,10 @@
           <Parameter Name="UserID" Type="int" Mode="In" />
           <Parameter Name="CategoryID" Type="int" Mode="In" />
         </Function>
+        <Function Name="InsertUser_Publisher" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+          <Parameter Name="PublisherID" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="Seed_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CID" Type="nvarchar" Mode="In" />
           <Parameter Name="Country" Type="nvarchar" Mode="In" />
@@ -190,6 +194,10 @@
             <End Role="User" EntitySet="Users" />
             <End Role="User_Publisher" EntitySet="User_Publisher" />
           </AssociationSet>
+          <FunctionImport Name="InsertUser_Publisher">
+            <Parameter Name="UserID" Mode="In" Type="Int32" />
+            <Parameter Name="PublisherID" Mode="In" Type="String" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="Category">
           <Key>
@@ -371,7 +379,16 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
+            <EntityTypeMapping TypeName="NewsFeed.DBModel.User_Publisher">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="NewsFeed.DBModel.Store.InsertUser_Publisher">
+                  <ScalarProperty Name="PublisherID" ParameterName="PublisherID" />
+                  <ScalarProperty Name="UserID" ParameterName="UserID" />
+                </InsertFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="InsertUser_Publisher" FunctionName="NewsFeed.DBModel.Store.InsertUser_Publisher" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

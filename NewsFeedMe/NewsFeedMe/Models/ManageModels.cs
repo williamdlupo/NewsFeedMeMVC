@@ -12,4 +12,11 @@ namespace NewsFeedMe.Models
         public List<Publisher> FollowedSources;
         public List<Category> FollowedTopics;
     }
+
+    public class SaveFollowingModel
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Type { get; set; }
+    }
 }

@@ -20,6 +20,9 @@ namespace NewsFeedMe.Controllers
         {
             ViewBag.Message = TempData["result"] as string;
 
+            var claim = System.Security.Claims.ClaimsPrincipal.Current.Claims;
+            int user = Convert.ToInt32(claim.FirstOrDefault(x => x.Type.EndsWith("twitter:userid")).Value);
+
             using (var context = new EntityFramework())
             {
                 FollowingModel following = new FollowingModel
@@ -41,32 +44,53 @@ namespace NewsFeedMe.Controllers
                                       top.Country
                                   }).ToList()
                                         .Select(x => new Category { CID = x.CID, Country = x.Country })).ToList()
-
-                    //get lists of currently followed sources and topics
                 };
 
                 return View(following);
             }
         }
 
-        public async Task<ActionResult> TestContent(string publisherID)
+        public async Task<ActionResult> SaveFollowing(SaveFollowingModel[] topicList)
         {
             var claim = System.Security.Claims.ClaimsPrincipal.Current.Claims;
+            int user = Convert.ToInt32(claim.FirstOrDefault(x => x.Type.EndsWith("twitter:userid")).Value);
 
             using (var context = new EntityFramework())
             {
                 try
                 {
-                    int userid = Convert.ToInt32(claim.FirstOrDefault(x => x.Type.EndsWith("twitter:userid")).Value);
-                    var interest = new User_Publisher { UserID = userid, PublisherID = publisherID };
-
-                    var result = context.User_Publisher.Add(interest);
-                    await context.SaveChangesAsync();
-
-                    TempData["result"] = "Content selection saved!";
-                    return RedirectToAction("Following");
+                    if (topicList.Where(x => x.Type.Equals("category")).ToList().Count > 0)
+                    {
+                        foreach (SaveFollowingModel category in topicList.Where(x => x.Type.Equals("category")).ToList())
+                        {
+                            context.User_Category.Add(
+                                new User_Category
+                                {
+                                    UserID = user,
+                                    CategoryID = context.Categories.Select(x => new { x.ID, x.CID }).Where(x => x.CID.Equals(category.Id)).FirstOrDefault().ID
+                                });
+                            await context.SaveChangesAsync();
+                        }
+                    }
+                    if (topicList.Where(x => x.Type.Equals("publisher")).ToList().Count > 0)
+                    {
+                        foreach (SaveFollowingModel publisher in topicList.Where(x => x.Type.Equals("publisher")).ToList())
+                        {
+                            context.User_Publisher.Add(
+                                new User_Publisher
+                                {
+                                    UserID = user,
+                                    PublisherID = publisher.Id
+                                });
+                            await context.SaveChangesAsync();
+                        }
+                    }
                 }
                 catch { throw; }
+
+                TempData["result"] = "Interests saved!";
+                return RedirectToAction("Following");
+
             }
         }
 

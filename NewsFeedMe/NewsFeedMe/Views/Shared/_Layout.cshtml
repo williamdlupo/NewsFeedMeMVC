@@ -8,6 +8,7 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/customScripts")
 </head>
 
 @if (!Request.IsAuthenticated)
@@ -39,15 +40,15 @@
                     <div hidden="hidden" id="Login-Partial">@Html.Partial("_LoginPartial")</div>
                 </div>
             </div>
+            <div id="sidebar" class="sidebar collapse fixed">
+                <ul class="nav">
+                    <li id="Feed"><a href="@Url.Action("Home", "Feed")" title="News Feed"><em class="fa fa-rocket large"></em><text class="h3 pull-right" id="Mobile-Feed" hidden="hidden">News Feed</text></a></li>
+                    <li id="Bookmarks"><a href="@Url.Action("Bookmarks", "Manage")" title="My Bookmarks"><em class="fa fa-bookmark large"></em><text class="h3 pull-right" id="Mobile-Bookmarks" hidden="hidden">Bookmarks</text></a></li>
+                    <li id="Settings"><a href="@Url.Action("Following", "Manage")" title="Account Settings"><em class="fa fa-cogs large"></em><text class="h3 pull-right" id="Mobile-Settings" hidden="hidden">Settings</text></a></li>
+                    <li><a href="@Url.Action("LogOff", "Account")" title="Logout"><em class="fa fa-power-off large"></em><text class="h3 pull-right" id="Mobile-Logout" hidden="hidden">Logoff</text></a></li>
+                </ul>
+            </div>
         </nav>
-        <div id="sidebar" class="sidebar collapse">
-            <ul class="nav menu">
-                <li id="Feed"><a href="@Url.Action("Home", "Feed")" title="My Feed"><em class="fa fa-rocket large"></em><text class="h3 pull-right" id="Mobile-Feed" hidden="hidden">News Feed</text></a></li>
-                <li id="Bookmarks"><a href="@Url.Action("Bookmarks", "Manage")" title="My Bookmarks"><em class="fa fa-bookmark large"></em><text class="h3 pull-right" id="Mobile-Bookmarks" hidden="hidden">Bookmarks</text></a></li>
-                <li id="Settings"><a href="@Url.Action("Settings", "Manage")" title="Account Settings"><em class="fa fa-cogs large"></em><text class="h3 pull-right" id="Mobile-Settings" hidden="hidden">Settings</text></a></li>
-                <li><a href="@Url.Action("LogOff", "Account")" title="Logout"><em class="fa fa-power-off large"></em><text class="h3 pull-right" id="Mobile-Logout" hidden="hidden">Logoff</text></a></li>
-            </ul>
-        </div>
         <div class="container body-content">
             @RenderBody()
         </div>
@@ -55,15 +56,3 @@
         @RenderSection("scripts", required: false)
     </body>
 }
-
-    <script type="text/javascript">
-        $(function () {
-            if ($(window).width() < 414) {
-                $('#Mobile-Feed').show();
-                $('#Mobile-Bookmarks').show();
-                $('#Mobile-Settings').show();
-                $('#Mobile-Logout').show();
-            }
-            else { $('#Login-Partial').show();}
-        });
-</script>

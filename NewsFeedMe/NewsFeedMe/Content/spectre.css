@@ -163,3 +163,49 @@
         transform: translate(-50%, -50%);
         z-index: 1;
     }
+.toast {
+    background: rgba(69, 77, 93, .9);
+    border: .05rem solid #454d5d;
+    border-color: #454d5d;
+    border-radius: .1rem;
+    color: #fff;
+    display: block;
+    padding: .4rem;
+    width: 100%;
+}
+
+    .toast.toast-primary {
+        background: rgba(87, 85, 217, .9);
+        border-color: #5755d9;
+    }
+
+    .toast.toast-success {
+        background: rgba(50, 182, 67, .9);
+        border-color: #32b643;
+    }
+
+    .toast.toast-warning {
+        background: rgba(255, 183, 0, .9);
+        border-color: #ffb700;
+    }
+
+    .toast.toast-error {
+        background: rgba(232, 86, 0, .9);
+        border-color: #e85600;
+    }
+
+    .toast a {
+        color: #fff;
+        text-decoration: underline;
+    }
+
+        .toast a:focus,
+        .toast a:hover,
+        .toast a:active,
+        .toast a.active {
+            opacity: .75;
+        }
+
+    .toast .btn-clear {
+        margin: 4px -2px 4px 4px;
+    }

@@ -108,5 +108,18 @@ namespace NewsFeedMe
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Seed_Publisher", pIDParameter, nameParameter, descriptionParameter, uRLParameter);
         }
+    
+        public virtual int InsertUser_Publisher(Nullable<int> userID, string publisherID)
+        {
+            var userIDParameter = userID.HasValue ?
+                new ObjectParameter("UserID", userID) :
+                new ObjectParameter("UserID", typeof(int));
+    
+            var publisherIDParameter = publisherID != null ?
+                new ObjectParameter("PublisherID", publisherID) :
+                new ObjectParameter("PublisherID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertUser_Publisher", userIDParameter, publisherIDParameter);
+        }
     }
 }
