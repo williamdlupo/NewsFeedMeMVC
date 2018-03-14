@@ -30,6 +30,7 @@ $(function () {
             var chip = '<span class="chip" id=' + id + ' role="button">' + topic.Name + '</span>';
 
             $('#selectedTopics').append(chip);
+
             $(this).removeClass('btn-primary').addClass('btn-success');
             $(this).find('span').removeClass('fa fa-plus').addClass('fa fa-check');
         }
@@ -40,7 +41,7 @@ $(function () {
             topicList = topicList.filter(function (el) {
                 return el.Id !== id;
             });
-            console.log(topicList);
+
             $('#selectedTopics').empty();
             if (idList.length > 0) {
                 for (var i = 0; i < idList.length; i++) {
@@ -51,7 +52,7 @@ $(function () {
             $(this).removeClass('btn-success').addClass('btn-primary');
             $(this).find('span').removeClass('fa fa-check').addClass('fa fa-plus');
             if (idList.length === 0) {
-                $('#warning').show();
+                $('#topicsWindow').hide();
             }
         }
     });
@@ -67,7 +68,7 @@ $(function () {
 
             $('#topicsWindow').show();
             $('#warning').hide();
-            var chip = '<span class="chip" id=' + id + ' role="button">' + topic.Name + '</span>';
+            var chip = '<span class="chip text-capitalize" id=' + id + ' role="button">' + topic.Name + '</span>';
 
             $('#selectedTopics').append(chip);
             $(this).removeClass('btn-primary').addClass('btn-success');
@@ -80,18 +81,18 @@ $(function () {
             topicList = topicList.filter(function (el) {
                 return el.Id !== id;
             });
-            console.log(topicList);
+
             $('#selectedTopics').empty();
             if (idList.length > 0) {
                 for (var i = 0; i < idList.length; i++) {
-                    chip = '<span class="chip" role="button">' + topicList[i].Name + '</span>';
+                    chip = '<span class="chip text-capitalize" role="button">' + topicList[i].Name + '</span>';
                     $('#selectedTopics').append(chip);
                 }
             }
             $(this).removeClass('btn-success').addClass('btn-primary');
             $(this).find('span').removeClass('fa fa-check').addClass('fa fa-plus');
             if (idList.length === 0) {
-                $('#warning').show();
+                $('#topicsWindow').hide();
             }
         }
     });
