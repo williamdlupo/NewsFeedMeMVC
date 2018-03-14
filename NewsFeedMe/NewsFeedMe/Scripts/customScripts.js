@@ -21,7 +21,7 @@ $(function () {
         var name = $(this).attr('name');
         var topic = { 'Id': id, 'Name': name, 'Type': 'publisher' };
 
-        if ($.inArray(id, idList) == -1) {
+        if ($.inArray(id, idList) === -1) {
             idList.push(id);
             topicList.push(topic);
 
@@ -31,11 +31,11 @@ $(function () {
 
             $('#selectedTopics').append(chip);
             $(this).removeClass('btn-primary').addClass('btn-success');
-            $(this).find('span').removeClass('fa fa-plus').addClass('fa fa-check')
+            $(this).find('span').removeClass('fa fa-plus').addClass('fa fa-check');
         }
         else {
             idList = $.grep(idList, function (value) {
-                return value != id;
+                return value !== id;
             });
             topicList = topicList.filter(function (el) {
                 return el.Id !== id;
@@ -44,13 +44,13 @@ $(function () {
             $('#selectedTopics').empty();
             if (idList.length > 0) {
                 for (var i = 0; i < idList.length; i++) {
-                    var chip = '<span class="chip" role="button">' + topicList[i].Name + '</span>';
+                    chip = '<span class="chip" role="button">' + topicList[i].Name + '</span>';
                     $('#selectedTopics').append(chip);
                 }
             }
             $(this).removeClass('btn-success').addClass('btn-primary');
-            $(this).find('span').removeClass('fa fa-check').addClass('fa fa-plus')
-            if (idList.length == 0) {
+            $(this).find('span').removeClass('fa fa-check').addClass('fa fa-plus');
+            if (idList.length === 0) {
                 $('#warning').show();
             }
         }
@@ -61,7 +61,7 @@ $(function () {
         var name = $(this).attr('name');
         var topic = { 'Id': id, 'Name': name, 'Type': 'category' };
 
-        if ($.inArray(id, idList) == -1) {
+        if ($.inArray(id, idList) === -1) {
             idList.push(id);
             topicList.push(topic);
 
@@ -71,11 +71,11 @@ $(function () {
 
             $('#selectedTopics').append(chip);
             $(this).removeClass('btn-primary').addClass('btn-success');
-            $(this).find('span').removeClass('fa fa-plus').addClass('fa fa-check')
+            $(this).find('span').removeClass('fa fa-plus').addClass('fa fa-check');
         }
         else {
             idList = $.grep(idList, function (value) {
-                return value != id;
+                return value !== id;
             });
             topicList = topicList.filter(function (el) {
                 return el.Id !== id;
@@ -84,13 +84,13 @@ $(function () {
             $('#selectedTopics').empty();
             if (idList.length > 0) {
                 for (var i = 0; i < idList.length; i++) {
-                    var chip = '<span class="chip" role="button">' + topicList[i].Name + '</span>';
+                    chip = '<span class="chip" role="button">' + topicList[i].Name + '</span>';
                     $('#selectedTopics').append(chip);
                 }
             }
             $(this).removeClass('btn-success').addClass('btn-primary');
-            $(this).find('span').removeClass('fa fa-check').addClass('fa fa-plus')
-            if (idList.length == 0) {
+            $(this).find('span').removeClass('fa fa-check').addClass('fa fa-plus');
+            if (idList.length === 0) {
                 $('#warning').show();
             }
         }
@@ -113,6 +113,6 @@ $(function () {
     $("#saveFollowing").click(function () {
         var url = $(this).data('request-url');
 
-         $.post(url, {topicList}).done(window.location = '/Manage/Following')
+        $.post(url, { topicList }).done(window.location.reload(true));
     });
 });

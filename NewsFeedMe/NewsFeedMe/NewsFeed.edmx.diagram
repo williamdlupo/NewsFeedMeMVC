@@ -4,16 +4,16 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="b0b285db440d4af9a57fddb389a37680" Name="Diagram1">
-        <EntityTypeShape EntityType="NewsFeed.DBModel.Category" Width="1.5" PointX="10.5" PointY="4.25" />
-        <EntityTypeShape EntityType="NewsFeed.DBModel.Publisher" Width="1.5" PointX="10.5" PointY="1.125" />
-        <EntityTypeShape EntityType="NewsFeed.DBModel.User" Width="1.5" PointX="4.625" PointY="3.75" />
-        <EntityTypeShape EntityType="NewsFeed.DBModel.User_Category" Width="1.5" PointX="7.125" PointY="4" />
-        <EntityTypeShape EntityType="NewsFeed.DBModel.User_Publisher" Width="1.5" PointX="6.875" PointY="1" />
-        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Category_Category" />
-        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Publisher_Publisher1" />
-        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Category_User" />
-        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Publisher_User" />
+      <Diagram DiagramId="b20699bbd54744daaf959757f0b4fe35" Name="Diagram1">
+        <EntityTypeShape EntityType="NewsFeed.DBModel.Category" Width="1.5" PointX="2.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="NewsFeed.DBModel.Publisher" Width="1.5" PointX="8.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="NewsFeed.DBModel.User" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NewsFeed.DBModel.User_Category" Width="1.5" PointX="2.125" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="NewsFeed.DBModel.User_Publisher" Width="1.5" PointX="8.75" PointY="3.875" IsExpanded="true" />
+        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Category_Category" ManuallyRouted="false" />
+        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Publisher_Publisher1" ManuallyRouted="false" />
+        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Category_User" ManuallyRouted="false" />
+        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Publisher_User" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

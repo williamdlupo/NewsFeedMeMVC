@@ -180,8 +180,8 @@
     }
 
     .toast.toast-success {
-        background: rgba(50, 182, 67, .9);
-        border-color: #32b643;
+        background: #8ad919;
+        border-color: #8ad919;
     }
 
     .toast.toast-warning {

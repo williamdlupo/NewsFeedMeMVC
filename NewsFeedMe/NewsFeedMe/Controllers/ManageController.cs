@@ -43,7 +43,25 @@ namespace NewsFeedMe.Controllers
                                       top.CID,
                                       top.Country
                                   }).ToList()
-                                        .Select(x => new Category { CID = x.CID, Country = x.Country })).ToList()
+                                        .Select(x => new Category { CID = x.CID, Country = x.Country })).ToList(),
+                    FollowedTopics = ((from category in context.Set<Category>()
+                                        where (
+                                                (from subcat in context.User_Category
+                                                 where subcat.UserID.Equals(user)
+                                                 select subcat.CategoryID)
+                                                 .ToList())
+                                       .Contains(category.ID)
+                                      select category.CID)
+                                      .ToList().Select(x => new Category { CID = x})).ToList(),
+                    FollowedSources = ((from source in context.Set<Publisher>()
+                                        where (
+                                                (from subcat in context.User_Publisher
+                                                 where subcat.UserID.Equals(user)
+                                                 select subcat.PublisherID)
+                                                 .ToList())
+                                       .Contains(source.PID)
+                                        select new { source.PID, source.Name })
+                                      .ToList().Select(x => new Publisher { PID = x.PID, Name = x.Name })).ToList()
                 };
 
                 return View(following);
@@ -61,28 +79,34 @@ namespace NewsFeedMe.Controllers
                 {
                     if (topicList.Where(x => x.Type.Equals("category")).ToList().Count > 0)
                     {
+                        int id = 0;
                         foreach (SaveFollowingModel category in topicList.Where(x => x.Type.Equals("category")).ToList())
                         {
                             context.User_Category.Add(
                                 new User_Category
                                 {
+                                    Id = id,
                                     UserID = user,
                                     CategoryID = context.Categories.Select(x => new { x.ID, x.CID }).Where(x => x.CID.Equals(category.Id)).FirstOrDefault().ID
                                 });
                             await context.SaveChangesAsync();
+                            id++;
                         }
                     }
                     if (topicList.Where(x => x.Type.Equals("publisher")).ToList().Count > 0)
                     {
+                        int id = 0;
                         foreach (SaveFollowingModel publisher in topicList.Where(x => x.Type.Equals("publisher")).ToList())
                         {
                             context.User_Publisher.Add(
                                 new User_Publisher
                                 {
+                                    ID = id,
                                     UserID = user,
                                     PublisherID = publisher.Id
                                 });
                             await context.SaveChangesAsync();
+                            id++;
                         }
                     }
                 }
