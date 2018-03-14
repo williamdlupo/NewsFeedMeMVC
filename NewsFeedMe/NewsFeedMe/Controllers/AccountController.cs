@@ -39,12 +39,13 @@ namespace NewsFeedMe.Controllers
                 {
                     int userid = Convert.ToInt32(claim.FirstOrDefault(x => x.Type.EndsWith("twitter:userid")).Value);
                     
-                    var userstatus = from db in context.Users
+                    var userstatus = (from db in context.Users
                                      where db.Id == userid
-                                     select new { db.ScreenName, db.ProfilePictureURL };
+                                     select new { db.ScreenName, db.ProfilePictureURL }).FirstOrDefault();
+                    string screenname = userstatus.ScreenName;
                     
                     //Determine if user already exists - if not, create the user
-                    if (userstatus.Count() == 0)
+                    if (screenname is null)
                     {
                         var oauthToken = claim.FirstOrDefault(x => x.Type.EndsWith("twitter:access_token")).Value;
                         var oauthSecret = claim.FirstOrDefault(x => x.Type.EndsWith("twitter:access_token_secret")).Value;
@@ -84,7 +85,7 @@ namespace NewsFeedMe.Controllers
                         }
                     }
 
-                    Session["ProfilePicture"] = userstatus.FirstOrDefault().ProfilePictureURL;
+                    Session["ProfilePicture"] = userstatus.ProfilePictureURL;
                     return RedirectToAction("Home", "Feed");
                 }
                 catch { throw; }
