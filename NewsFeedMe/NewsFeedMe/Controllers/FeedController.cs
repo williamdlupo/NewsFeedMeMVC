@@ -8,11 +8,9 @@ namespace NewsFeedMe.Controllers
 {
     public class FeedController : Controller
     {
-        private int UserID;
-
         public FeedController()
         {
-            UserID = Convert.ToInt32(System.Security.Claims.ClaimsPrincipal.Current.Claims.FirstOrDefault(x => x.Type.EndsWith("twitter:userid")).Value);
+            
         }
 
         // GET: Feed

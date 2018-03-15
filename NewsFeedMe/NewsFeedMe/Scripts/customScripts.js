@@ -32,7 +32,9 @@ $(function () {
             $('#selectedTopics').append(chip);
 
             $(this).removeClass('btn-primary').addClass('btn-success');
+            $(this).find('text').empty();
             $(this).find('span').removeClass('fa fa-plus').addClass('fa fa-check');
+            $(this).find('text').text(' Following!')
         }
         else {
             idList = $.grep(idList, function (value) {
@@ -51,6 +53,8 @@ $(function () {
             }
             $(this).removeClass('btn-success').addClass('btn-primary');
             $(this).find('span').removeClass('fa fa-check').addClass('fa fa-plus');
+            $(this).find('text').empty();
+            $(this).find('text').text(' Follow');
             if (idList.length === 0) {
                 $('#topicsWindow').hide();
             }
@@ -72,7 +76,9 @@ $(function () {
 
             $('#selectedTopics').append(chip);
             $(this).removeClass('btn-primary').addClass('btn-success');
+            $(this).find('text').empty();
             $(this).find('span').removeClass('fa fa-plus').addClass('fa fa-check');
+            $(this).find('text').text(' Following!')
         }
         else {
             idList = $.grep(idList, function (value) {
@@ -91,6 +97,8 @@ $(function () {
             }
             $(this).removeClass('btn-success').addClass('btn-primary');
             $(this).find('span').removeClass('fa fa-check').addClass('fa fa-plus');
+            $(this).find('text').empty();
+            $(this).find('text').text(' Follow');
             if (idList.length === 0) {
                 $('#topicsWindow').hide();
             }
