@@ -2,6 +2,7 @@
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
+using System;
 using System.Threading.Tasks;
 using System.Web.Configuration;
 
@@ -11,16 +12,17 @@ namespace NewsFeedMe.App_Start
     {
         public void ConfigureAuth(IAppBuilder app)
         {
+            app.SetDefaultSignInAsAuthenticationType("ExternalCookie");
             var cookieOptions = new CookieAuthenticationOptions
             {
-                SlidingExpiration = true,
-                ExpireTimeSpan = System.TimeSpan.FromMinutes(10),
+                AuthenticationType = "ExternalCookie",
+                AuthenticationMode = Microsoft.Owin.Security.AuthenticationMode.Active,
+                CookieName = ".AspNet.ExternalCookie",
+                ExpireTimeSpan = TimeSpan.FromMinutes(10),
+                LogoutPath = new PathString("/Account/LogOff"),
                 LoginPath = new PathString("/Account/Login")
             };
-
             app.UseCookieAuthentication(cookieOptions);
-
-            app.SetDefaultSignInAsAuthenticationType(cookieOptions.AuthenticationType);
 
             var twitterOptions = new Microsoft.Owin.Security.Twitter.TwitterAuthenticationOptions
             {
@@ -32,7 +34,7 @@ namespace NewsFeedMe.App_Start
                     {
                         context.Identity.AddClaim(new System.Security.Claims.Claim("urn:twitter:access_token", context.AccessToken, null, "Twitter"));
                         context.Identity.AddClaim(new System.Security.Claims.Claim("urn:twitter:access_token_secret", context.AccessTokenSecret, null, "Twitter"));
-                        return Task.FromResult(0);
+                        return Task.FromResult(true);
                     }
                 }
             };

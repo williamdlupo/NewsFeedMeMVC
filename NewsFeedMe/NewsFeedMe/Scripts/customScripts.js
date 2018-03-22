@@ -124,4 +124,14 @@ $(function () {
 
         $.post(url, { topicList }).done(window.location.reload(true));
     });
+
+    $('#searchBar').keyup(function () {
+        var query = $('#searchBar').val();
+        console.log(query);
+        $('*[id*=' + query + ']:visible').each(function () {
+            
+            console.log(this);
+            
+        });
+    })
 });
