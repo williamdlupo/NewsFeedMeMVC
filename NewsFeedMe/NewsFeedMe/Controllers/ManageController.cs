@@ -16,12 +16,12 @@ namespace NewsFeedMe.Controllers
         private HttpClient client = new HttpClient();
 
         [HttpGet]
-        public ActionResult Following()
+        public async Task<ActionResult> Following()
         {
             ViewBag.Message = TempData["result"] as string;
 
-            var claim = System.Security.Claims.ClaimsPrincipal.Current.Claims;
-            int user = Convert.ToInt32(claim.FirstOrDefault(x => x.Type.EndsWith("twitter:userid")).Value);
+            var authenticateResult = await HttpContext.GetOwinContext().Authentication.AuthenticateAsync("ExternalCookie");
+            int user = Convert.ToInt32(authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == "urn:twitter:userid").Value);
 
             using (var context = new EntityFramework())
             {
@@ -70,8 +70,8 @@ namespace NewsFeedMe.Controllers
 
         public async Task<ActionResult> SaveFollowing(SaveFollowingModel[] topicList)
         {
-            var claim = System.Security.Claims.ClaimsPrincipal.Current.Claims;
-            int user = Convert.ToInt32(claim.FirstOrDefault(x => x.Type.EndsWith("twitter:userid")).Value);
+            var authenticateResult = await HttpContext.GetOwinContext().Authentication.AuthenticateAsync("ExternalCookie");
+            int user = Convert.ToInt32(authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == "urn:twitter:userid").Value);
 
             using (var context = new EntityFramework())
             {

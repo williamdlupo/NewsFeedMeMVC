@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace NewsFeedMe.Controllers
 {
+    [Authorize]
     public class FeedController : Controller
     {
         public FeedController()
