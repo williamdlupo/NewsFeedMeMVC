@@ -20,11 +20,10 @@ namespace NewsFeedMe.Controllers
         {
             ViewBag.Message = TempData["result"] as string;
 
-            var authenticateResult = await HttpContext.GetOwinContext().Authentication.AuthenticateAsync("ExternalCookie");
-            int user = Convert.ToInt32(authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == "urn:twitter:userid").Value);
-
             using (var context = new EntityFramework())
             {
+                int user = context.Users.Where(x => x.ScreenName.Equals(User.Identity.Name)).Select(x => x.Id).FirstOrDefault();
+
                 FollowingModel following = new FollowingModel
                 {
                     //get list of all possible news sources and topics to follow
@@ -45,14 +44,14 @@ namespace NewsFeedMe.Controllers
                                   }).ToList()
                                         .Select(x => new Category { CID = x.CID, Country = x.Country })).ToList(),
                     FollowedTopics = ((from category in context.Set<Category>()
-                                        where (
-                                                (from subcat in context.User_Category
-                                                 where subcat.UserID.Equals(user)
-                                                 select subcat.CategoryID)
-                                                 .ToList())
-                                       .Contains(category.ID)
-                                      select category.CID)
-                                      .ToList().Select(x => new Category { CID = x})).ToList(),
+                                       where (
+                                               (from subcat in context.User_Category
+                                                where subcat.UserID.Equals(user)
+                                                select subcat.CategoryID)
+                                                .ToList())
+                                      .Contains(category.ID)
+                                       select category.CID)
+                                      .ToList().Select(x => new Category { CID = x })).ToList(),
                     FollowedSources = ((from source in context.Set<Publisher>()
                                         where (
                                                 (from subcat in context.User_Publisher
@@ -68,53 +67,48 @@ namespace NewsFeedMe.Controllers
             }
         }
 
+        [HttpPost]
         public async Task<ActionResult> SaveFollowing(SaveFollowingModel[] topicList)
         {
-            var authenticateResult = await HttpContext.GetOwinContext().Authentication.AuthenticateAsync("ExternalCookie");
-            int user = Convert.ToInt32(authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == "urn:twitter:userid").Value);
-
             using (var context = new EntityFramework())
             {
-                try
+                int user = context.Users.Where(x => x.ScreenName.Equals(User.Identity.Name)).Select(x => x.Id).FirstOrDefault();
+
+                if (topicList.Where(x => x.Type.Equals("category")).ToList().Count > 0)
                 {
-                    if (topicList.Where(x => x.Type.Equals("category")).ToList().Count > 0)
+                    int id = 0;
+                    foreach (SaveFollowingModel category in topicList.Where(x => x.Type.Equals("category")).ToList())
                     {
-                        int id = 0;
-                        foreach (SaveFollowingModel category in topicList.Where(x => x.Type.Equals("category")).ToList())
-                        {
-                            context.User_Category.Add(
-                                new User_Category
-                                {
-                                    Id = id,
-                                    UserID = user,
-                                    CategoryID = context.Categories.Select(x => new { x.ID, x.CID }).Where(x => x.CID.Equals(category.Id)).FirstOrDefault().ID
-                                });
-                            await context.SaveChangesAsync();
-                            id++;
-                        }
-                    }
-                    if (topicList.Where(x => x.Type.Equals("publisher")).ToList().Count > 0)
-                    {
-                        int id = 0;
-                        foreach (SaveFollowingModel publisher in topicList.Where(x => x.Type.Equals("publisher")).ToList())
-                        {
-                            context.User_Publisher.Add(
-                                new User_Publisher
-                                {
-                                    ID = id,
-                                    UserID = user,
-                                    PublisherID = publisher.Id
-                                });
-                            await context.SaveChangesAsync();
-                            id++;
-                        }
+                        context.User_Category.Add(
+                            new User_Category
+                            {
+                                Id = id,
+                                UserID = user,
+                                CategoryID = context.Categories.Select(x => new { x.ID, x.CID }).Where(x => x.CID.Equals(category.Id)).FirstOrDefault().ID
+                            });
+                        await context.SaveChangesAsync();
+                        id++;
                     }
                 }
-                catch { throw; }
+                if (topicList.Where(x => x.Type.Equals("publisher")).ToList().Count > 0)
+                {
+                    int id = 0;
+                    foreach (SaveFollowingModel publisher in topicList.Where(x => x.Type.Equals("publisher")).ToList())
+                    {
+                        context.User_Publisher.Add(
+                            new User_Publisher
+                            {
+                                ID = id,
+                                UserID = user,
+                                PublisherID = publisher.Id
+                            });
+                        await context.SaveChangesAsync();
+                        id++;
+                    }
+                }
 
                 TempData["result"] = "Interests saved!";
-                return RedirectToAction("Following");
-
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
             }
         }
 

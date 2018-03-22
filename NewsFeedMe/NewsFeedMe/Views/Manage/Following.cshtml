@@ -16,6 +16,7 @@
         </div>
     </div>
 }
+<button class="btn btn-warning" id="myBtn" title="Jump to top"><span class="fa fa-arrow-up large"></span></button>
 <div class="container">
     <h3 class="text-capitalize text-center h2">Follow topics, news sources or whatever tickles your fancy</h3>
     <div class="row">
@@ -45,7 +46,7 @@
     <div class="row">
         <div class="col-md-offset-3 col-md-6 panel panel-body" role="alert" hidden="hidden" id="topicsWindow">
             <div class="container-fluid">
-                <div class="row"><b>Add: </b><div class="pull-right btn btn-success" id="saveFollowing" data-request-url="@Url.Action("SaveFollowing", "Manage")">Save</div></div>
+                <div class="row"><b>Add: </b><div class="pull-right btn btn-success" id="saveFollowing" data-request-url="@Url.Content("~/Manage/SaveFollowing")">Save</div></div>
                 <div class="row"><span class="text-danger" id="warning" hidden="hidden"><b>Woah!</b> You're not following anything. There must be <em>something</em> you're interested in</span></div>
                 <div class="row col-lg-offset-1 col-lg-11"><b id="selectedTopics"></b></div>
             </div>

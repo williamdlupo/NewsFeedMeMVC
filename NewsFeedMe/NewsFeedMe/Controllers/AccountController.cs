@@ -30,6 +30,7 @@ namespace NewsFeedMe.Controllers
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
             var authenticateResult = await HttpContext.GetOwinContext().Authentication.AuthenticateAsync("ExternalCookie");
+
             if (authenticateResult != null)
             {
                 int userid = Convert.ToInt32(authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == "urn:twitter:userid").Value);
@@ -42,45 +43,38 @@ namespace NewsFeedMe.Controllers
                     string Key = WebConfigurationManager.AppSettings["TwitterKey"];
                     string Secret = WebConfigurationManager.AppSettings["TwitterSecret"];
 
-                    try
+                    TwitterService service = new TwitterService(Key, Secret);
+
+                    service.AuthenticateWith(oauthToken, oauthSecret);
+                    VerifyCredentialsOptions option = new VerifyCredentialsOptions();
+
+                    //Use Access Tokens to access user Twitter data  
+                    TwitterUser twitterdata = service.VerifyCredentials(option);
+
+                    //load twitter user data into User class
+                    var user = new User { Id = Convert.ToInt32(twitterdata.Id), Access_Token = oauthToken, Secret = oauthSecret, ExternalService = "Twitter", ScreenName = twitterdata.ScreenName.ToString(), ProfilePictureURL = twitterdata.ProfileImageUrlHttps };
+
+                    using (var context = new EntityFramework())
                     {
-                        TwitterService service = new TwitterService(Key, Secret);
-
-                        service.AuthenticateWith(oauthToken, oauthSecret);
-                        VerifyCredentialsOptions option = new VerifyCredentialsOptions();
-
-                        //Use Access Tokens to access user Twitter data  
-                        TwitterUser twitterdata = service.VerifyCredentials(option);
-
-                        //load twitter user data into User class
-                        var user = new User { Id = Convert.ToInt32(twitterdata.Id), Access_Token = oauthToken, Secret = oauthSecret, ExternalService = "Twitter", ScreenName = twitterdata.ScreenName.ToString(), ProfilePictureURL = twitterdata.ProfileImageUrlHttps };
-
-                        using (var context = new EntityFramework())
-                        {
-                            //new user is saved to DB with EntityFramework
-                            var result = context.Users.Add(user);
-                            context.SaveChanges();
-                        }
-
-                        Session["ProfilePicture"] = user.ProfilePictureURL;
-                        AuthenticationManager.SignIn();
-                        TempData["result"] = "You're all signed up!";
-                        return RedirectToAction("Following", "Manage");
+                        //new user is saved to DB with EntityFramework
+                        var result = context.Users.Add(user);
+                        context.SaveChanges();
                     }
 
-                    //something went wrong, throw error and redirect back to login page.
-                    catch
-                    {
-                        TempData["error"] = "Something went wrong";
-                        return RedirectToAction("LogOff");
-                    }
+                    Session["ProfilePicture"] = user.ProfilePictureURL;
+                    AuthenticationManager.SignIn();
+                    TempData["result"] = "You're all signed up!";
+                    return RedirectToAction("Following", "Manage");
+
                 }
                 else
                 {
                     using (var context = new EntityFramework())
                     {
+                        int user = context.Users.Where(x => x.ScreenName.Equals(User.Identity.Name)).Select(x => x.Id).FirstOrDefault();
+
                         var userstatus = (from db in context.Users
-                                          where db.Id == userid
+                                          where db.Id == user
                                           select new { db.ScreenName, db.ProfilePictureURL }).FirstOrDefault();
 
                         Session["ProfilePicture"] = userstatus.ProfilePictureURL;
@@ -88,7 +82,7 @@ namespace NewsFeedMe.Controllers
                     return RedirectToAction("Home", "Feed");
                 }
             }
-            TempData["error"] = "Something went wrong";
+            TempData["error"] = "Your session expired! Please log in again";
             return RedirectToAction("LogOff");
         }
 
@@ -100,8 +94,8 @@ namespace NewsFeedMe.Controllers
                 using (var context = new EntityFramework())
                 {
                     result = (from user in context.Users
-                               where user.Id == userid
-                               select user.Id).Any();
+                              where user.Id == userid
+                              select user.Id).Any();
                 }
             }
             catch { throw; }
@@ -133,7 +127,7 @@ namespace NewsFeedMe.Controllers
 
             public override void ExecuteResult(ControllerContext context)
             {
-                var properties = new AuthenticationProperties() { RedirectUri = RedirectUri, IsPersistent = true, AllowRefresh = true };
+                var properties = new AuthenticationProperties() { RedirectUri = RedirectUri };
                 context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
             }
         }
