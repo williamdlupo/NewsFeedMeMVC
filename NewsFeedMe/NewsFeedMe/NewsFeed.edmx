@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="NewsFeed.DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="NewsFeed.DBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="ID" />
@@ -22,6 +22,19 @@
           <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
           <Property Name="URL" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="Publisher_Article">
+          <Key>
+            <PropertyRef Name="AID" />
+          </Key>
+          <Property Name="AID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Author" Type="nvarchar" MaxLength="50" />
+          <Property Name="Title" Type="nvarchar(max)" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="URL" Type="nvarchar" MaxLength="128" />
+          <Property Name="URlToImage" Type="nvarchar(max)" />
+          <Property Name="PublishedAt" Type="date" />
+        </EntityType>
         <EntityType Name="User">
           <Key>
             <PropertyRef Name="Id" />
@@ -31,7 +44,7 @@
           <Property Name="Secret" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="ExternalService" Type="nvarchar" MaxLength="50" />
           <Property Name="ScreenName" Type="nvarchar" MaxLength="50" />
-          <Property Name="ProfilePictureURL" Type="nvarchar" MaxLength="128" />
+          <Property Name="ProfilePictureURL" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="User_Category">
           <Key>
@@ -49,6 +62,18 @@
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="PublisherID" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <Association Name="FK_Publisher_Articles_Publisher">
+          <End Role="Publisher" Type="Self.Publisher" Multiplicity="1" />
+          <End Role="Publisher_Article" Type="Self.Publisher_Article" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publisher">
+              <PropertyRef Name="PID" />
+            </Principal>
+            <Dependent Role="Publisher_Article">
+              <PropertyRef Name="PID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_User_Category_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
           <End Role="User_Category" Type="Self.User_Category" Multiplicity="*" />
@@ -103,7 +128,7 @@
           <Parameter Name="Secret" Type="nvarchar" Mode="In" />
           <Parameter Name="Service" Type="nvarchar" Mode="In" />
           <Parameter Name="ScreenName" Type="nvarchar" Mode="In" />
-          <Parameter Name="ProfilePic" Type="nvarchar" Mode="In" />
+          <Parameter Name="ProfilePic" Type="nvarchar(max)" Mode="In" />
         </Function>
         <Function Name="InsertUser_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="UserID" Type="int" Mode="In" />
@@ -126,9 +151,14 @@
         <EntityContainer Name="NewsFeedDBModelStoreContainer">
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Publisher" EntityType="Self.Publisher" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Publisher_Article" EntityType="Self.Publisher_Article" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Category" EntityType="Self.User_Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User_Publisher" EntityType="Self.User_Publisher" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Publisher_Articles_Publisher" Association="Self.FK_Publisher_Articles_Publisher">
+            <End Role="Publisher" EntitySet="Publisher" />
+            <End Role="Publisher_Article" EntitySet="Publisher_Article" />
+          </AssociationSet>
           <AssociationSet Name="FK_User_Category_Category" Association="Self.FK_User_Category_Category">
             <End Role="Category" EntitySet="Category" />
             <End Role="User_Category" EntitySet="User_Category" />
@@ -146,8 +176,7 @@
             <End Role="User_Publisher" EntitySet="User_Publisher" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="NewsFeed.DBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -169,6 +198,7 @@
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="URL" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="User_Publisher" Relationship="Self.FK_User_Publisher_Publisher1" FromRole="Publisher" ToRole="User_Publisher" />
+          <NavigationProperty Name="Publisher_Article" Relationship="NewsFeed.DBModel.FK_Publisher_Articles_Publisher" FromRole="Publisher" ToRole="Publisher_Article" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -179,7 +209,7 @@
           <Property Name="Secret" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ExternalService" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ScreenName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProfilePictureURL" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="ProfilePictureURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="User_Category" Relationship="Self.FK_User_Category_User" FromRole="User" ToRole="User_Category" />
           <NavigationProperty Name="User_Publisher" Relationship="Self.FK_User_Publisher_User" FromRole="User" ToRole="User_Publisher" />
         </EntityType>
@@ -299,7 +329,38 @@
             <Parameter Name="Description" Mode="In" Type="String" />
             <Parameter Name="URL" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="Publisher_Article" EntityType="NewsFeed.DBModel.Publisher_Article" />
+          <AssociationSet Name="FK_Publisher_Articles_Publisher" Association="NewsFeed.DBModel.FK_Publisher_Articles_Publisher">
+            <End Role="Publisher" EntitySet="Publishers" />
+            <End Role="Publisher_Article" EntitySet="Publisher_Article" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Publisher_Article">
+          <Key>
+            <PropertyRef Name="AID" />
+          </Key>
+          <Property Name="AID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Author" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="URL" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="URlToImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PublishedAt" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Publisher" Relationship="NewsFeed.DBModel.FK_Publisher_Articles_Publisher" FromRole="Publisher_Article" ToRole="Publisher" />
+        </EntityType>
+        <Association Name="FK_Publisher_Articles_Publisher">
+          <End Type="NewsFeed.DBModel.Publisher" Role="Publisher" Multiplicity="1" />
+          <End Type="NewsFeed.DBModel.Publisher_Article" Role="Publisher_Article" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publisher">
+              <PropertyRef Name="PID" />
+            </Principal>
+            <Dependent Role="Publisher_Article">
+              <PropertyRef Name="PID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -406,6 +467,20 @@
           <FunctionImportMapping FunctionImportName="InsertUser_Publisher" FunctionName="NewsFeed.DBModel.Store.InsertUser_Publisher" />
           <FunctionImportMapping FunctionImportName="Seed_Category" FunctionName="NewsFeed.DBModel.Store.Seed_Category" />
           <FunctionImportMapping FunctionImportName="Seed_Publisher" FunctionName="NewsFeed.DBModel.Store.Seed_Publisher" />
+          <EntitySetMapping Name="Publisher_Article">
+            <EntityTypeMapping TypeName="NewsFeed.DBModel.Publisher_Article">
+              <MappingFragment StoreEntitySet="Publisher_Article">
+                <ScalarProperty Name="PublishedAt" ColumnName="PublishedAt" />
+                <ScalarProperty Name="URlToImage" ColumnName="URlToImage" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="PID" ColumnName="PID" />
+                <ScalarProperty Name="AID" ColumnName="AID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

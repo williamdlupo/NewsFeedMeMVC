@@ -14,6 +14,8 @@
         <AssociationConnector Association="NewsFeed.DBModel.FK_User_Publisher_Publisher1" ManuallyRouted="false" />
         <AssociationConnector Association="NewsFeed.DBModel.FK_User_Category_User" ManuallyRouted="false" />
         <AssociationConnector Association="NewsFeed.DBModel.FK_User_Publisher_User" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="NewsFeed.DBModel.Publisher_Article" Width="1.5" PointX="10.875" PointY="0.875" />
+        <AssociationConnector Association="NewsFeed.DBModel.FK_Publisher_Articles_Publisher" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

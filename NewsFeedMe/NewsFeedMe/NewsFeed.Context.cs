@@ -32,6 +32,7 @@ namespace NewsFeedMe
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<User_Category> User_Category { get; set; }
         public virtual DbSet<User_Publisher> User_Publisher { get; set; }
+        public virtual DbSet<Publisher_Article> Publisher_Article { get; set; }
     
         public virtual int InsertUser(Nullable<int> id, string accessToken, string secret, string service, string screenName, string profilePic)
         {

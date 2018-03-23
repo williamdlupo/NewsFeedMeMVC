@@ -204,6 +204,9 @@
     <Compile Include="Publisher.cs">
       <DependentUpon>NewsFeed.tt</DependentUpon>
     </Compile>
+    <Compile Include="Publisher_Article.cs">
+      <DependentUpon>NewsFeed.tt</DependentUpon>
+    </Compile>
     <Compile Include="User.cs">
       <DependentUpon>NewsFeed.tt</DependentUpon>
     </Compile>

@@ -1,37 +1,42 @@
-﻿
+﻿@model NewsFeedMe.Models.FeedModel
 @{
     ViewBag.Title = "Home";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="container-fluid">
-    <div class="jumbotron">
-        <h1>ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-    </div>
+    <button class="btn btn-warning" id="myBtn" title="Jump to top"><span class="fa fa-arrow-up large"></span></button>
+    @foreach (var source in Model.FollowedSources)
+    {
+        if (Model.Publisher_Articles.Where(x => x.Publisher.PID.Equals(source.PID)).Count() > 0)
+        {
 
-    <div class="row">
-        <div class="col-md-4">
-            <h2>Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-            <h2>Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </div>
-        <div class="col-md-4">
-            <h2>Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </div>
-    </div>
+            <div class="container-fluid">
+                <div class="h1 text-capitalize">@source.Name</div>
+                @foreach (var article in Model.Publisher_Articles.Where(x => x.Publisher.PID.Equals(source.PID)).OrderByDescending(x => x.PublishedAt).Take(6))
+                {
+                    <div class="col-sm-4">
+                        <div class="card">
+                            <div class="card-header container-fluid">
+                                <br />
+                                <b class="card-title h4">@article.Title</b>
+                            </div>
+                            <br />
+                            <div class="card-image"><img class="img-responsive" src="@article.URlToImage" /></div>
+                            <div class="card-body">
+                                <div class="card-text h5">@article.Author</div>
+                                <p class="card-text text-muted">Published: @article.PublishedAt.Value.ToShortDateString()</p>
+                                @if (article.Description.Length > 240)
+                                {<p class="card-text">@article.Description.Substring(0, 240)...    </p> }
+                            else
+                            { <p class="card-text">@article.Description</p>}
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
 </div>
 
 <script>

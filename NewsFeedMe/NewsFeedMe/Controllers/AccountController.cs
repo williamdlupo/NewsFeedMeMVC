@@ -58,10 +58,9 @@ namespace NewsFeedMe.Controllers
                     {
                         //new user is saved to DB with EntityFramework
                         var result = context.Users.Add(user);
-                        context.SaveChanges();
+                        await context.SaveChangesAsync();
                     }
-
-                    Session["ProfilePicture"] = user.ProfilePictureURL;
+                    
                     AuthenticationManager.SignIn();
                     TempData["result"] = "You're all signed up!";
                     return RedirectToAction("Following", "Manage");
@@ -69,16 +68,6 @@ namespace NewsFeedMe.Controllers
                 }
                 else
                 {
-                    using (var context = new EntityFramework())
-                    {
-                        int user = context.Users.Where(x => x.ScreenName.Equals(User.Identity.Name)).Select(x => x.Id).FirstOrDefault();
-
-                        var userstatus = (from db in context.Users
-                                          where db.Id == user
-                                          select new { db.ScreenName, db.ProfilePictureURL }).FirstOrDefault();
-
-                        Session["ProfilePicture"] = userstatus.ProfilePictureURL;
-                    }
                     return RedirectToAction("Home", "Feed");
                 }
             }

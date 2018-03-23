@@ -8,6 +8,20 @@
     -ms-flex-direction: column;
     flex-direction: column;
     margin: 15px 0px 15px 0px;
+    height:517px;
+}
+
+.card-special {
+    background: #fff;
+    border: .05rem solid #e7e9ed;
+    border-radius: .1rem;
+    display: flex;
+    display: -ms-flexbox;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    margin: 15px 0px 15px 0px;
+    width: 340px;
+    height: inherit;
 }
 
     .card .card-header,
@@ -228,3 +242,11 @@
     #myBtn:hover {
         background-color: #555; /* Add a dark-grey background on hover */
     }
+.columns {
+    display: flex;
+    display: -ms-flexbox;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-left: -.4rem;
+    margin-right: -.4rem;
+}
