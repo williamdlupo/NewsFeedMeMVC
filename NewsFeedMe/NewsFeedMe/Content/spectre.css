@@ -8,7 +8,6 @@
     -ms-flex-direction: column;
     flex-direction: column;
     margin: 15px 0px 15px 0px;
-    height:517px;
 }
 
 .card-special {
@@ -20,8 +19,7 @@
     -ms-flex-direction: column;
     flex-direction: column;
     margin: 15px 0px 15px 0px;
-    width: 340px;
-    height: inherit;
+    min-height: 320px;
 }
 
     .card .card-header,
@@ -242,11 +240,31 @@
     #myBtn:hover {
         background-color: #555; /* Add a dark-grey background on hover */
     }
-.columns {
+.spectre-panel {
+    border: .05rem solid #e7e9ed;
+    border-radius: .1rem;
     display: flex;
     display: -ms-flexbox;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    margin-left: -.4rem;
-    margin-right: -.4rem;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    background-color:white;
 }
+
+    .spectre-panel .spectre-panel-header,
+    .spectre-panel .spectre-panel-footer {
+        -ms-flex: 0 0 auto;
+        flex: 0 0 auto;
+        padding: .8rem;
+    }
+
+    .spectre-panel .spectre-panel-nav {
+        -ms-flex: 0 0 auto;
+        flex: 0 0 auto;
+    }
+
+    .spectre-panel .spectre-panel-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        overflow-y: auto;
+        padding: 0 .8rem;
+    }

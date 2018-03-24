@@ -8,6 +8,8 @@
         $('#Desktop-Categories').hide();
         $('#Desktop-Sources').hide();
         $('#Desktop-Custom').hide();
+
+        $('#panel div').removeClass('card-special')
     }
     else { $('#Login-Partial').show(); }
 

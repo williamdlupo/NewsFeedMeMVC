@@ -53,6 +53,7 @@ namespace NewsFeedMe.Controllers
                                          .Contains(x.PID)
                                            select new
                                            {
+                                               x.AID,
                                                x.Author,
                                                x.Description,
                                                x.Title,
@@ -62,6 +63,7 @@ namespace NewsFeedMe.Controllers
                                                x.URlToImage
                                            }).ToList().Select(x => new Publisher_Article
                                            {
+                                               AID = x.AID,
                                                Author = x.Author,
                                                Description = x.Description,
                                                Title = x.Title,
