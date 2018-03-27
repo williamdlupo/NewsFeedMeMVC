@@ -22,7 +22,7 @@ namespace NewsFeedMe.Controllers
 
             using (var context = new EntityFramework())
             {
-                int user = context.Users.Where(x => x.ScreenName.Equals(User.Identity.Name)).Select(x => x.Id).FirstOrDefault();
+                long user = context.Users.Where(x => x.ScreenName.Equals(User.Identity.Name)).Select(x => x.Id).FirstOrDefault();
 
                 FollowingModel following = new FollowingModel
                 {
@@ -72,7 +72,7 @@ namespace NewsFeedMe.Controllers
         {
             using (var context = new EntityFramework())
             {
-                int user = context.Users.Where(x => x.ScreenName.Equals(User.Identity.Name)).Select(x => x.Id).FirstOrDefault();
+                long user = context.Users.Where(x => x.ScreenName.Equals(User.Identity.Name)).Select(x => x.Id).FirstOrDefault();
 
                 if (topicList.Where(x => x.Type.Equals("category")).ToList().Count > 0)
                 {

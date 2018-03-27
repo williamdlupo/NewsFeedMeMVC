@@ -29,16 +29,16 @@ namespace NewsFeedMe
     
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Publisher> Publishers { get; set; }
+        public virtual DbSet<Publisher_Article> Publisher_Article { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<User_Category> User_Category { get; set; }
         public virtual DbSet<User_Publisher> User_Publisher { get; set; }
-        public virtual DbSet<Publisher_Article> Publisher_Article { get; set; }
     
-        public virtual int InsertUser(Nullable<int> id, string accessToken, string secret, string service, string screenName, string profilePic)
+        public virtual int InsertUser(Nullable<long> id, string accessToken, string secret, string service, string screenName, string profilePic)
         {
             var idParameter = id.HasValue ?
                 new ObjectParameter("Id", id) :
-                new ObjectParameter("Id", typeof(int));
+                new ObjectParameter("Id", typeof(long));
     
             var accessTokenParameter = accessToken != null ?
                 new ObjectParameter("AccessToken", accessToken) :
@@ -63,11 +63,11 @@ namespace NewsFeedMe
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertUser", idParameter, accessTokenParameter, secretParameter, serviceParameter, screenNameParameter, profilePicParameter);
         }
     
-        public virtual int InsertUser_Category(Nullable<int> userID, Nullable<int> categoryID)
+        public virtual int InsertUser_Category(Nullable<long> userID, Nullable<int> categoryID)
         {
             var userIDParameter = userID.HasValue ?
                 new ObjectParameter("UserID", userID) :
-                new ObjectParameter("UserID", typeof(int));
+                new ObjectParameter("UserID", typeof(long));
     
             var categoryIDParameter = categoryID.HasValue ?
                 new ObjectParameter("CategoryID", categoryID) :
@@ -76,11 +76,11 @@ namespace NewsFeedMe
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertUser_Category", userIDParameter, categoryIDParameter);
         }
     
-        public virtual int InsertUser_Publisher(Nullable<int> userID, string publisherID)
+        public virtual int InsertUser_Publisher(Nullable<long> userID, string publisherID)
         {
             var userIDParameter = userID.HasValue ?
                 new ObjectParameter("UserID", userID) :
-                new ObjectParameter("UserID", typeof(int));
+                new ObjectParameter("UserID", typeof(long));
     
             var publisherIDParameter = publisherID != null ?
                 new ObjectParameter("PublisherID", publisherID) :

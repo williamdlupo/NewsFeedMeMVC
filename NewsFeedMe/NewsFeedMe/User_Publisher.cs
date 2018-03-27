@@ -15,7 +15,7 @@ namespace NewsFeedMe
     public partial class User_Publisher
     {
         public int ID { get; set; }
-        public int UserID { get; set; }
+        public long UserID { get; set; }
         public string PublisherID { get; set; }
     
         public virtual Publisher Publisher { get; set; }

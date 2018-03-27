@@ -9,7 +9,8 @@
         $('#Desktop-Sources').hide();
         $('#Desktop-Custom').hide();
 
-        $('#panel div').removeClass('card-special');
+        $('*#panel').removeClass('container-fluid');
+        $('#panel div').removeClass('card');
     }
     else { $('#Login-Partial').show(); }
 
@@ -23,11 +24,10 @@
             document.getElementById("myBtn").style.display = "none";
         }
     }
-
+   
     // When the user clicks on the button, scroll to the top of the document
     $('#myBtn').click(function topFunction() {
-        document.body.scrollTop = 0; // For Safari
-        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
     })
 });
 

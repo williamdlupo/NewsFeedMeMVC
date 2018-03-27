@@ -25,7 +25,7 @@ namespace NewsFeedMe.Controllers
             using (var context = new EntityFramework())
             {
                 //get the current user
-                int user = context.Users.Where(x => x.ScreenName.Equals(User.Identity.Name)).Select(x => x.Id).FirstOrDefault();
+                long user = context.Users.Where(x => x.ScreenName.Equals(User.Identity.Name)).Select(x => x.Id).FirstOrDefault();
 
                 HttpClient client = new HttpClient();
                 StringBuilder sourceText = new StringBuilder();

@@ -17,8 +17,8 @@ namespace NewsFeedMe
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Publisher()
         {
-            this.User_Publisher = new HashSet<User_Publisher>();
             this.Publisher_Article = new HashSet<Publisher_Article>();
+            this.User_Publisher = new HashSet<User_Publisher>();
         }
     
         public string PID { get; set; }
@@ -27,8 +27,8 @@ namespace NewsFeedMe
         public string URL { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<User_Publisher> User_Publisher { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Publisher_Article> Publisher_Article { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<User_Publisher> User_Publisher { get; set; }
     }
 }

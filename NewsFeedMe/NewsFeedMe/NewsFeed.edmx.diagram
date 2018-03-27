@@ -7,15 +7,15 @@
       <Diagram DiagramId="b20699bbd54744daaf959757f0b4fe35" Name="Diagram1">
         <EntityTypeShape EntityType="NewsFeed.DBModel.Category" Width="1.5" PointX="2.25" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="NewsFeed.DBModel.Publisher" Width="1.5" PointX="8.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="NewsFeed.DBModel.User" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="NewsFeed.DBModel.User_Category" Width="1.5" PointX="2.125" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="NewsFeed.DBModel.User_Publisher" Width="1.5" PointX="8.75" PointY="3.875" IsExpanded="true" />
-        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Category_Category" ManuallyRouted="false" />
-        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Publisher_Publisher1" ManuallyRouted="false" />
-        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Category_User" ManuallyRouted="false" />
-        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Publisher_User" ManuallyRouted="false" />
         <EntityTypeShape EntityType="NewsFeed.DBModel.Publisher_Article" Width="1.5" PointX="10.875" PointY="0.875" />
         <AssociationConnector Association="NewsFeed.DBModel.FK_Publisher_Articles_Publisher" />
+        <EntityTypeShape EntityType="NewsFeed.DBModel.User" Width="1.5" PointX="5.5" PointY="3.5" />
+        <EntityTypeShape EntityType="NewsFeed.DBModel.User_Category" Width="1.5" PointX="2.375" PointY="3.75" />
+        <EntityTypeShape EntityType="NewsFeed.DBModel.User_Publisher" Width="1.5" PointX="8.75" PointY="3.75" />
+        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Category_Category" />
+        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Publisher_Publisher1" />
+        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Category_User" />
+        <AssociationConnector Association="NewsFeed.DBModel.FK_User_Publisher_User" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

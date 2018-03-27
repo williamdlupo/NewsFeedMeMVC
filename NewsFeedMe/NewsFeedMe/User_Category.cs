@@ -15,7 +15,7 @@ namespace NewsFeedMe
     public partial class User_Category
     {
         public int Id { get; set; }
-        public int UserID { get; set; }
+        public long UserID { get; set; }
         public int CategoryID { get; set; }
     
         public virtual Category Category { get; set; }

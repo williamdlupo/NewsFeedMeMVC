@@ -33,7 +33,7 @@ namespace NewsFeedMe.Controllers
 
             if (authenticateResult != null)
             {
-                int userid = Convert.ToInt32(authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == "urn:twitter:userid").Value);
+                long userid = Convert.ToInt64(authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == "urn:twitter:userid").Value);
 
                 if (!UserExists(userid))
                 {
@@ -52,7 +52,7 @@ namespace NewsFeedMe.Controllers
                     TwitterUser twitterdata = service.VerifyCredentials(option);
 
                     //load twitter user data into User class
-                    var user = new User { Id = Convert.ToInt32(twitterdata.Id), Access_Token = oauthToken, Secret = oauthSecret, ExternalService = "Twitter", ScreenName = twitterdata.ScreenName.ToString(), ProfilePictureURL = twitterdata.ProfileImageUrlHttps };
+                    var user = new User { Id = Convert.ToInt64(twitterdata.Id), Access_Token = oauthToken, Secret = oauthSecret, ExternalService = "Twitter", ScreenName = twitterdata.ScreenName.ToString(), ProfilePictureURL = twitterdata.ProfileImageUrlHttps };
 
                     using (var context = new EntityFramework())
                     {
@@ -75,7 +75,7 @@ namespace NewsFeedMe.Controllers
             return RedirectToAction("LogOff");
         }
 
-        private bool UserExists(int userid)
+        private bool UserExists(long userid)
         {
             bool result = false;
             try

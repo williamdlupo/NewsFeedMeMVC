@@ -127,7 +127,7 @@
                                                         <div class="pull-right" role="button" data-toggle="collapse" href="#card-@articles[i+3].AID" aria-expanded="false">
                                                             <span class="fa fa-angle-down large"></span>
                                                         </div>
-                                                        <p class="card-title h4" style="color:black;">@articles[i + 2].Title</p>
+                                                        <p class="card-title h4" style="color:black;">@articles[i + 3].Title</p>
                                                         <p class="tile-subtitle text-muted">@String.Format("{0}h ago", DateTime.Now.Add(-articles[i + 3].PublishedAt.Value.TimeOfDay).Hour)</p>
                                                     </a>
                                                 </div>
@@ -233,11 +233,11 @@
                         }
                     }
                 </div>
-                <row>
+                <div class="row">
                     <div class="col-lg-6 col-sm-offset-3">
                         <div class="pull-right btn btn-success btn-block" href="#"><text class="h4">Load More @source.Name</text></div>
                     </div>
-                </row>
+                </div>
                 <br />
             </div>
         }

@@ -21,7 +21,7 @@ namespace NewsFeedMe
             this.User_Publisher = new HashSet<User_Publisher>();
         }
     
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Access_Token { get; set; }
         public string Secret { get; set; }
         public string ExternalService { get; set; }
