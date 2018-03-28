@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
-using TweetSharp;
+using Tweetinvi;
 
 namespace NewsFeedMe.Controllers
 {
@@ -43,16 +43,12 @@ namespace NewsFeedMe.Controllers
                     string Key = WebConfigurationManager.AppSettings["TwitterKey"];
                     string Secret = WebConfigurationManager.AppSettings["TwitterSecret"];
 
-                    TwitterService service = new TwitterService(Key, Secret);
-
-                    service.AuthenticateWith(oauthToken, oauthSecret);
-                    VerifyCredentialsOptions option = new VerifyCredentialsOptions();
-
-                    //Use Access Tokens to access user Twitter data  
-                    TwitterUser twitterdata = service.VerifyCredentials(option);
-
+                    //authorize user with Twitter and load user data 
+                    Auth.SetUserCredentials(Key, Secret, oauthToken, oauthSecret);
+                    var twitterUser = Tweetinvi.User.GetAuthenticatedUser();
+                  
                     //load twitter user data into User class
-                    var user = new User { Id = Convert.ToInt64(twitterdata.Id), Access_Token = oauthToken, Secret = oauthSecret, ExternalService = "Twitter", ScreenName = twitterdata.ScreenName.ToString(), ProfilePictureURL = twitterdata.ProfileImageUrlHttps };
+                    var user = new User { Id = twitterUser.Id, Access_Token = oauthToken, Secret = oauthSecret, ExternalService = "Twitter", ScreenName = twitterUser.ScreenName, ProfilePictureURL = twitterUser.ProfileImageUrl400x400 };
 
                     using (var context = new EntityFramework())
                     {

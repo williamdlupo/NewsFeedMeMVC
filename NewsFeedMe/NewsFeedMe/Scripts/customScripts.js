@@ -10,7 +10,8 @@
         $('#Desktop-Custom').hide();
 
         $('*#panel').removeClass('container-fluid');
-        $('#panel div').removeClass('card');
+        $('#body').removeClass('container');
+        $('#body').removeClass('body-content');
     }
     else { $('#Login-Partial').show(); }
 
