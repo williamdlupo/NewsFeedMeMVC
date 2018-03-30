@@ -9,27 +9,28 @@
         $('#Desktop-Sources').hide();
         $('#Desktop-Custom').hide();
 
-        $('*#panel').removeClass('container-fluid');
+        //$('*#panel').removeClass('container-fluid');
         $('#body').removeClass('container');
         $('#body').removeClass('body-content');
+
+        $('#feedNav').addClass('navbar-fixed-bottom');
     }
     else { $('#Login-Partial').show(); }
 
-    // When the user scrolls down 20px from the top of the document, show the button
-    window.onscroll = function () { scrollFunction() };
-
-    function scrollFunction() {
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            document.getElementById("myBtn").style.display = "block";
-        } else {
-            document.getElementById("myBtn").style.display = "none";
-        }
-    }
-   
-    // When the user clicks on the button, scroll to the top of the document
-    $('#myBtn').click(function topFunction() {
+    $('#feedBtn').click(function () {
+        $(this).removeClass('btn-default').addClass('btn-primary');
+        $('#newsBtn').removeClass('btn-primary').addClass('btn-default');
+        $('#News').hide();
+        $('#Mixed').show();
         $('html, body').animate({ scrollTop: 0 }, 'fast');
-    })
+    });
+    $('#newsBtn').click(function () {
+        $(this).removeClass('btn-default').addClass('btn-primary').addClass('container-fluid');
+        $('#feedBtn').removeClass('btn-primary').addClass('btn-default');
+        $('#Mixed').hide();
+        $('#News').show();
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+    });
 });
 
 $(function () {

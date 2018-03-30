@@ -3,429 +3,463 @@
     ViewBag.Title = "Feed";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<button class="btn btn-warning" id="myBtn" title="Jump to top"><span class="fa fa-arrow-up large"></span></button>
-<div id="Mixed">
-    @foreach(var block in Model.MixedFeed)
-    {
-    <div class="container-fluid" id="panel">
-        <row class="col-lg-12">
-            <div class="col-lg-6">
-                <div class="card">
-                    <a class="card-header" role="button" data-toggle="collapse" href="#card-@block.Articles.First().AID" aria-expanded="false">
-                        <div class="card-image"><img class="img-responsive" src="@block.Articles.First().URlToImage" /></div>
-                        <div class="pull-right" aria-expanded="false">
-                            <span class="fa fa-angle-down large"></span>
-                        </div> <div class="card-title h4" style="color:black;">@block.Articles.First().Title</div>
-                        <text class="text-muted pull-right">@String.Format("{0}h ago", DateTime.Now.Add(-block.Articles.First().PublishedAt.Value.TimeOfDay).Hour)</text>
-                        <text class="text-muted">@Model.FollowedSources.Where(x=> x.PID.Equals(block.Articles.First().PID)).Select(x=> x.Name).First()</text>
-                    </a>
-                    <br />
-                    <div id="card-@block.Articles.First().AID" class="collapse">
-                        <div class="container-fluid">
-                            <p class="card-text" style="color:black;">@block.Articles.First().Description</p>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="pull-left">
-                                <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
-                                <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
-                            </div>
-                            <div class="pull-right">
-                                <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
-                                <a role="button" class="btn btn-primary" href="@block.Articles.First().URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6" id="@block.Tweets.First().Id .AID">
-                <div class="card">
-                    <div class="tile">
-                        <div class="tile-icon">
-                            <figure class="avatar avatar-xl">
-                                <img src="@block.Tweets.First().CreatedBy.ProfileImageUrl400x400">
-                            </figure>
-                        </div>
-                        <div class="tile-content container-fluid">
-                            <div class="col-lg-12">
-                                <a role="button" href="@block.Tweets.First().Url" target="_blank" aria-expanded="false">
-                                    <p class="card-title h4" style="color:black;">@block.Tweets.First().Text</p>
-                                    <p class="tile-subtitle text-muted pull-right">@String.Format("{0}h ago", DateTime.Now.Add(-block.Tweets.First().TweetLocalCreationDate.TimeOfDay).Hour)</p>
-                                    <p class="tile-subtitle">@block.Tweets.First().CreatedBy.ScreenName</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="tile">
-                        <div class="tile-icon">
-                            <figure class="avatar avatar-xl">
-                                <img src="@block.Tweets.Skip(1).Take(1).First().CreatedBy.ProfileImageUrl400x400">
-                            </figure>
-                        </div>
-                        <div class="tile-content container-fluid">
-                            <div class="col-lg-12">
-                                <a role="button" href="@block.Tweets.Skip(1).Take(1).First().Url" target="_blank" aria-expanded="false">
-                                    <p class="card-title h4" style="color:black;">@block.Tweets.Skip(1).Take(1).First().Text</p>
-                                    <p class="tile-subtitle text-muted pull-right">@String.Format("{0}h ago", DateTime.Now.Add(-block.Tweets.Skip(1).Take(1).First().TweetLocalCreationDate.TimeOfDay).Hour)</p>
-                                    <p class="tile-subtitle">@block.Tweets.Skip(1).Take(1).First().CreatedBy.ScreenName</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="tile">
-                        <div class="tile-icon">
-                            <figure class="avatar avatar-xl">
-                                <img src="@block.Tweets.Skip(2).Take(1).First().CreatedBy.ProfileImageUrl400x400">
-                            </figure>
-                        </div>
-                        <div class="tile-content container-fluid">
-                            <div class="col-lg-12">
-                                <a role="button" href="@block.Tweets.Skip(2).Take(1).First().Url" target="_blank" aria-expanded="false">
-                                    <p class="card-title h4" style="color:black;">@block.Tweets.Skip(2).Take(1).First().Text</p>
-                                    <p class="tile-subtitle text-muted pull-right">@String.Format("{0}h ago", DateTime.Now.Add(-block.Tweets.Skip(2).Take(1).First().TweetLocalCreationDate.TimeOfDay).Hour)</p>
-                                    <p class="tile-subtitle">@block.Tweets.Skip(2).Take(1).First().CreatedBy.ScreenName</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </row>
-        <row class="col-lg-12">
-            <div class="col-lg-6" id="@block.Tweets.Skip(3).First().Id .AID">
-                <div class="card">
-                    <div class="tile">
-                        <div class="tile-icon">
-                            <figure class="avatar avatar-xl">
-                                <img src="@block.Tweets.Skip(3).First().CreatedBy.ProfileImageUrl400x400">
-                            </figure>
-                        </div>
-                        <div class="tile-content container-fluid">
-                            <div class="col-lg-12">
-                                <a role="button" href="@block.Tweets.Skip(3).First().Url" target="_blank" aria-expanded="false">
-                                    <p class="card-title h4" style="color:black;">@block.Tweets.Skip(3).First().Text</p>
-                                    <p class="tile-subtitle text-muted pull-right">@String.Format("{0}h ago", DateTime.Now.Add(-block.Tweets.Skip(3).First().TweetLocalCreationDate.TimeOfDay).Hour)</p>
-                                    <p class="tile-subtitle">@block.Tweets.Skip(3).First().CreatedBy.ScreenName</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="tile">
-                        <div class="tile-icon">
-                            <figure class="avatar avatar-xl">
-                                <img src="@block.Tweets.Skip(4).First().CreatedBy.ProfileImageUrl400x400">
-                            </figure>
-                        </div>
-                        <div class="tile-content container-fluid">
-                            <div class="col-lg-12">
-                                <a role="button" href="@block.Tweets.Skip(4)First().Url" target="_blank" aria-expanded="false">
-                                    <p class="card-title h4" style="color:black;">@block.Tweets.Skip(4).First().Text</p>
-                                    <p class="tile-subtitle text-muted pull-right">@String.Format("{0}h ago", DateTime.Now.Add(-block.Tweets.Skip(4).First().TweetLocalCreationDate.TimeOfDay).Hour)</p>
-                                    <p class="tile-subtitle">@block.Tweets.Skip(4).First().CreatedBy.ScreenName</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="tile">
-                        <div class="tile-icon">
-                            <figure class="avatar avatar-xl">
-                                <img src="@block.Tweets.Skip(5).First().CreatedBy.ProfileImageUrl400x400">
-                            </figure>
-                        </div>
-                        <div class="tile-content container-fluid">
-                            <div class="col-lg-12">
-                                <a role="button" href="@block.Tweets.Skip(5).First().Url" target="_blank" aria-expanded="false">
-                                    <p class="card-title h4" style="color:black;">@block.Tweets.Skip(5).First().Text</p>
-                                    <p class="tile-subtitle text-muted pull-right">@String.Format("{0}h ago", DateTime.Now.Add(-block.Tweets.Skip(5).First().TweetLocalCreationDate.TimeOfDay).Hour)</p>
-                                    <p class="tile-subtitle">@block.Tweets.Skip(5).First().CreatedBy.ScreenName</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="card">
-                    <a class="card-header" role="button" data-toggle="collapse" href="#card-@block.Articles.Skip(1).First().AID" aria-expanded="false">
-                        <div class="card-image"><img class="img-responsive" src="@block.Articles.Skip(1).First().URlToImage" /></div>
-                        <div class="pull-right" aria-expanded="false">
-                            <span class="fa fa-angle-down large"></span>
-                        </div> <div class="card-title h4" style="color:black;">@block.Articles.Skip(1).First().Title</div>
-                        <text class="text-muted pull-right">@String.Format("{0}h ago", DateTime.Now.Add(-block.Articles.Skip(1).First().PublishedAt.Value.TimeOfDay).Hour)</text>
-                        <text class="text-muted">@Model.FollowedSources.Where(x => x.PID.Equals(block.Articles.Skip(1).First().PID)).Select(x => x.Name).First()</text>
-                    </a>
-                    <br />
-                    <div id="card-@block.Articles.Skip(1).First().AID" class="collapse">
-                        <div class="container-fluid">
-                            <p class="card-text" style="color:black;">@block.Articles.Skip(1).First().Description</p>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="pull-left">
-                                <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
-                                <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
-                            </div>
-                            <div class="pull-right">
-                                <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
-                                <a role="button" class="btn btn-primary" href="@block.Articles.Skip(1).First().URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </row>
-    </div>
-    }
-</div>
-<div id="News" hidden="hidden">
-    @foreach (var source in Model.FollowedSources)
-    {
-        if (Model.Publisher_Articles.Where(x => x.PID.Equals(source.PID)).Count() > 6)
+    <div id="Mixed">
+        @foreach (var block in Model.MixedFeed)
         {
             <div class="container-fluid" id="panel">
-                <div class="row"><div class="h1 text-capitalize pull-right" id="panel-@source.PID">@source.Name.</div></div>
-                <div class="">
-                    @{ var articles = Model.Publisher_Articles.Where(x => x.PID.Equals(source.PID)).OrderBy(x => DateTime.Now.Add(-x.PublishedAt.Value.TimeOfDay).Hour).Take(6).ToArray();
-                        for (int i = 0; i < 4; i += 4)
-                        {
-                            <row class="col-lg-12">
-                                <div class="col-lg-6" id="@articles[i].AID">
-                                    <div class="card">
-                                        <a class="card-header" role="button" data-toggle="collapse" href="#card-@articles[i].AID" aria-expanded="false">
-                                            <div class="card-image"><img class="img-responsive" src="@articles[i].URlToImage" /></div>
-                                            <div class="pull-right" aria-expanded="false">
-                                                <span class="fa fa-angle-down large"></span>
-                                            </div> <div class="card-title h4" style="color:black;">@articles[i].Title</div>
-                                            <text class="text-muted pull-right">@String.Format("{0}h ago", DateTime.Now.Add(-articles[i].PublishedAt.Value.TimeOfDay).Hour)</text>
-                                            <text class="text-muted">@articles[i].Author</text>
-                                        </a>
-                                        <br />
-                                        <div id="card-@articles[i].AID" class="collapse">
-                                            <div class="container-fluid">
-                                                <p class="card-text" style="color:black;">@articles[i].Description</p>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="pull-left">
-                                                    <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
-                                                    <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
-                                                </div>
-                                                <div class="pull-right">
-                                                    <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
-                                                    <a role="button" class="btn btn-primary" href="@articles[i].URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
-                                                </div>
-                                            </div>
-                                        </div>
+                <row class="col-lg-12">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <a class="card-header" role="button" data-toggle="collapse" href="#card-@block.Articles.First().AID" aria-expanded="false">
+                                <div class="card-image"><img class="img-responsive" src="@block.Articles.First().URlToImage" /></div>
+                                <div class="pull-right" aria-expanded="false">
+                                    <span class="fa fa-angle-down large"></span>
+                                </div> <div class="card-title h4" style="color:black;">@block.Articles.First().Title</div>
+                                <text class="text-muted pull-right">@String.Format("{0}h ago", DateTime.Now.Add(-block.Articles.First().PublishedAt.Value.TimeOfDay).Hour)</text>
+                                <text class="text-muted">@Model.FollowedSources.Where(x => x.PID.Equals(block.Articles.First().PID)).Select(x => x.Name).First()</text>
+                            </a>
+                            <br />
+                            <div id="card-@block.Articles.First().AID" class="collapse">
+                                <div class="container-fluid">
+                                    <p class="card-text" style="color:black;">@block.Articles.First().Description</p>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="pull-left">
+                                        <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
+                                        <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
+                                    </div>
+                                    <div class="pull-right">
+                                        <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
+                                        <a role="button" class="btn btn-primary" href="@block.Articles.First().URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
                                     </div>
                                 </div>
-                                <div class="col-lg-6" id="@articles[i+1].AID">
-                                    <div class="card">
-                                        <a class="card-header" role="button" data-toggle="collapse" href="#card-@articles[i+1].AID" aria-expanded="false">
-                                            <div class="card-image"><img class="img-responsive" src="@articles[i+1].URlToImage" /></div>
-                                            <div class="pull-right" aria-expanded="false">
-                                                <span class="fa fa-angle-down large"></span>
-                                            </div><div class="card-title h4" style="color:black;">@articles[i + 1].Title</div>
-                                            <text class="text-muted pull-right">@String.Format("{0}h ago", DateTime.Now.Add(-articles[i + 1].PublishedAt.Value.TimeOfDay).Hour)</text>
-                                            <text class="text-muted">@articles[i + 1].Author</text>
-                                        </a>
-                                        <br />
-                                        <div id="card-@articles[i+1].AID" class="collapse">
-                                            <div class="container-fluid">
-                                                <p class="card-text" style="color:black;">@articles[i + 1].Description</p>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="pull-left">
-                                                    <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
-                                                    <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
-                                                </div>
-                                                <div class="pull-right">
-                                                    <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
-                                                    <a role="button" class="btn btn-primary" href="@articles[i+1].URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </row>
-                            <row class="col-lg-12">
-                                <div class="col-lg-6" id="@articles[i+2].AID">
-                                    <div class="card">
-                                        <div class="tile">
-                                            <div class="tile-icon">
-                                                <figure class="avatar avatar-xl">
-                                                    <img src="@articles[i+2].URlToImage">
-                                                </figure>
-                                            </div>
-                                            <div class="tile-content container-fluid">
-                                                <div class="col-lg-12">
-                                                    <a role="button" data-toggle="collapse" href="#card-@articles[i+2].AID" aria-expanded="false">
-                                                        <div class="pull-right" role="button" data-toggle="collapse" href="#card-@articles[i+2].AID" aria-expanded="false">
-                                                            <span class="fa fa-angle-down large"></span>
-                                                        </div>
-                                                        <p class="card-title h4" style="color:black;">@articles[i + 2].Title</p>
-                                                        <p class="tile-subtitle text-muted">@String.Format("{0}h ago", DateTime.Now.Add(-articles[i + 2].PublishedAt.Value.TimeOfDay).Hour)</p>
-                                                    </a>
-                                                </div>
-                                                <br />
-                                                <div id="card-@articles[i+2].AID" class="collapse tile-content">
-                                                    <div class="container-fluid">
-                                                        <p class="card-text" style="color:black;">@articles[i + 2].Description</p>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="pull-left">
-                                                            <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
-                                                            <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
-                                                        </div>
-                                                        <div class="pull-right">
-                                                            <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
-                                                            <a role="button" class="btn btn-primary" href="@articles[i+2].URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6" id="@articles[i+3].AID">
-                                    <div class="card">
-                                        <div class="tile">
-                                            <div class="tile-icon">
-                                                <figure class="avatar avatar-xl">
-                                                    <img src="@articles[i+3].URlToImage">
-                                                </figure>
-                                            </div>
-                                            <div class="tile-content container-fluid">
-                                                <div class="col-lg-12">
-                                                    <a role="button" data-toggle="collapse" href="#card-@articles[i+3].AID" aria-expanded="false">
-                                                        <div class="pull-right" role="button" data-toggle="collapse" href="#card-@articles[i+3].AID" aria-expanded="false">
-                                                            <span class="fa fa-angle-down large"></span>
-                                                        </div>
-                                                        <p class="card-title h4" style="color:black;">@articles[i + 3].Title</p>
-                                                        <p class="tile-subtitle text-muted">@String.Format("{0}h ago", DateTime.Now.Add(-articles[i + 3].PublishedAt.Value.TimeOfDay).Hour)</p>
-                                                    </a>
-                                                </div>
-                                                <br />
-                                                <div id="card-@articles[i+3].AID" class="collapse tile-content">
-                                                    <div class="container-fluid">
-                                                        <p class="card-text" style="color:black;">@articles[i + 3].Description</p>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="pull-left">
-                                                            <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
-                                                            <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
-                                                        </div>
-                                                        <div class="pull-right">
-                                                            <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
-                                                            <a role="button" class="btn btn-primary" href="@articles[i+3].URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </row>
-                            <row class="col-lg-12">
-                                <div class="col-lg-6" id="@articles[i+4].AID">
-                                    <div class="card">
-                                        <div class="tile">
-                                            <div class="tile-icon">
-                                                <figure class="avatar avatar-xl">
-                                                    <img src="@articles[i+4].URlToImage">
-                                                </figure>
-                                            </div>
-                                            <div class="tile-content container-fluid">
-                                                <div class="col-lg-12">
-                                                    <a role="button" data-toggle="collapse" href="#card-@articles[i+4].AID" aria-expanded="false">
-                                                        <div class="pull-right" role="button" data-toggle="collapse" href="#card-@articles[i+4].AID" aria-expanded="false">
-                                                            <span class="fa fa-angle-down large"></span>
-                                                        </div>
-                                                        <p class="card-title h4" style="color:black;">@articles[i + 4].Title</p>
-                                                        <p class="tile-subtitle text-muted">@String.Format("{0}h ago", DateTime.Now.Add(-articles[i + 4].PublishedAt.Value.TimeOfDay).Hour)</p>
-                                                    </a>
-                                                </div>
-                                                <br />
-                                                <div id="card-@articles[i+4].AID" class="collapse tile-content">
-                                                    <div class="container-fluid">
-                                                        <p class="card-text" style="color:black;">@articles[i + 4].Description</p>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="pull-left">
-                                                            <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
-                                                            <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
-                                                        </div>
-                                                        <div class="pull-right">
-                                                            <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
-                                                            <a role="button" class="btn btn-primary" href="@articles[i+4].URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6" id="@articles[i+5].AID">
-                                    <div class="card">
-                                        <div class="tile">
-                                            <div class="tile-icon">
-                                                <figure class="avatar avatar-xl">
-                                                    <img src="@articles[i+5].URlToImage">
-                                                </figure>
-                                            </div>
-                                            <div class="tile-content container-fluid">
-                                                <div class="col-lg-12">
-                                                    <a role="button" data-toggle="collapse" href="#card-@articles[i+5].AID" aria-expanded="false">
-                                                        <div class="pull-right" role="button" data-toggle="collapse" href="#card-@articles[i+5].AID" aria-expanded="false">
-                                                            <span class="fa fa-angle-down large"></span>
-                                                        </div>
-                                                        <p class="card-title h4" style="color:black;">@articles[i + 5].Title</p>
-                                                        <p class="tile-subtitle text-muted">@String.Format("{0}h ago", DateTime.Now.Add(-articles[i + 5].PublishedAt.Value.TimeOfDay).Hour)</p>
-                                                    </a>
-                                                </div>
-                                                <br />
-                                                <div id="card-@articles[i+5].AID" class="collapse tile-content">
-                                                    <div class="container-fluid">
-                                                        <p class="card-text" style="color:black;">@articles[i + 5].Description</p>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="pull-left">
-                                                            <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
-                                                            <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
-                                                        </div>
-                                                        <div class="pull-right">
-                                                            <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
-                                                            <a role="button" class="btn btn-primary" href="@articles[i+5].URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </row>
-                        }
-                    }
-                </div>
-                <div class="row">
-                    <div class="col-lg-6 col-sm-offset-3">
-                        <div class="pull-right btn btn-success btn-block" href="#"><text class="h4">Load More @source.Name</text></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <br />
+                    <div class="col-lg-6" id="@block.Tweets.First().Id .AID">
+                        <div class="card">
+                            <div class="tile">
+                                <div class="tile-icon">
+                                    <figure class="avatar avatar-xl">
+                                        <img src="@block.Tweets.First().CreatedBy.ProfileImageUrl400x400">
+                                    </figure>
+                                </div>
+                                <div class="tile-content container-fluid">
+                                    <div class="col-lg-12">
+                                        <a role="button" href="@block.Tweets.First().Url" target="_blank" aria-expanded="false">
+                                            <p>
+                                                <br />
+                                                <text class="card-title h4" style="color:black;">@block.Tweets.First().CreatedBy.Name  </text>
+                                                <text class="tile-subtitle text-muted">@String.Format("@{0} • {1}", block.Tweets.First().CreatedBy.ScreenName, String.Format("{0}h", DateTime.Now.Add(-block.Tweets.First().TweetLocalCreationDate.TimeOfDay).Hour))</text>
+                                            </p>
+                                            <p class="tile-content" style="color:black;">@block.Tweets.First().Text</p>
+                                            @if (block.Tweets.First().Media.Count > 0)
+                                            {<p class="tile-content"><img class="img-responsive" src="@block.Tweets.First().Media.First().MediaURLHttps" /></p>}
+                                        </a>
+                                        <b><span class="text-success fa fa-retweet"> </span><text class="text-success"> @String.Format("{0:n0}", block.Tweets.First().RetweetCount) </text><span>  </span><span class="text-danger fa fa-heart"> </span><text class="text-danger"> @String.Format("{0:n0}", block.Tweets.First().FavoriteCount)</text></b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="tile">
+                                <div class="tile-icon">
+                                    <figure class="avatar avatar-xl">
+                                        <img src="@block.Tweets.Skip(1).Take(1).First().CreatedBy.ProfileImageUrl400x400">
+                                    </figure>
+                                </div>
+                                <div class="tile-content container-fluid">
+                                    <div class="col-lg-12">
+                                        <a role="button" href="@block.Tweets.Skip(1).First().Url" target="_blank" aria-expanded="false">
+                                            <p>
+                                                <br />
+                                                <text class="card-title h4" style="color:black;">@block.Tweets.Skip(1).First().CreatedBy.Name  </text>
+                                                <text class="tile-subtitle text-muted">@String.Format("@{0} • {1}", block.Tweets.Skip(1).First().CreatedBy.ScreenName, String.Format("{0}h", DateTime.Now.Add(-block.Tweets.Skip(1).First().TweetLocalCreationDate.TimeOfDay).Hour))</text>
+                                            </p>
+                                            <p class="tile-content" style="color:black;">@block.Tweets.Skip(1).First().Text</p>
+                                            @if (block.Tweets.Skip(1).First().Media.Count > 0)
+                                            {<p class="tile-content"><img class="img-responsive" src="@block.Tweets.Skip(1).First().Media.First().MediaURLHttps" /></p>}
+                                        </a>
+                                        <b><span class="text-success fa fa-retweet"> </span><text class="text-success"> @String.Format("{0:n0}", block.Tweets.Skip(1).First().RetweetCount) </text><span>  </span><span class="text-danger fa fa-heart"> </span><text class="text-danger"> @String.Format("{0:n0}", block.Tweets.Skip(1).First().FavoriteCount)</text></b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="tile">
+                                <div class="tile-icon">
+                                    <figure class="avatar avatar-xl">
+                                        <img src="@block.Tweets.Skip(2).Take(1).First().CreatedBy.ProfileImageUrl400x400">
+                                    </figure>
+                                </div>
+                                <div class="tile-content container-fluid">
+                                    <div class="col-lg-12">
+                                        <a role="button" href="@block.Tweets.Skip(2).First().Url" target="_blank" aria-expanded="false">
+                                            <p>
+                                                <br />
+                                                <text class="card-title h4" style="color:black;">@block.Tweets.Skip(2).First().CreatedBy.Name  </text>
+                                                <text class="tile-subtitle text-muted">@String.Format("@{0} • {1}", block.Tweets.Skip(2).First().CreatedBy.ScreenName, String.Format("{0}h", DateTime.Now.Add(-block.Tweets.Skip(2).First().TweetLocalCreationDate.TimeOfDay).Hour))</text>
+                                            </p>
+                                            <p class="tile-content" style="color:black;">@block.Tweets.Skip(2).First().Text</p>
+                                            @if (block.Tweets.Skip(2).First().Media.Count > 0)
+                                            {<p class="tile-content"><img class="img-responsive" src="@block.Tweets.Skip(2).First().Media.First().MediaURLHttps" /></p>}
+                                        </a>
+                                        <b><span class="text-success fa fa-retweet"> </span><text class="text-success"> @String.Format("{0:n0}", block.Tweets.Skip(2).First().RetweetCount) </text><span>  </span><span class="text-danger fa fa-heart"> </span><text class="text-danger"> @String.Format("{0:n0}", block.Tweets.Skip(2).First().FavoriteCount)</text></b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </row>
+                <row class="col-lg-12">
+                    <div class="col-lg-6" id="@block.Tweets.Skip(3).First().Id .AID">
+                        <div class="card">
+                            <div class="tile">
+                                <div class="tile-icon">
+                                    <figure class="avatar avatar-xl">
+                                        <img src="@block.Tweets.Skip(3).First().CreatedBy.ProfileImageUrl400x400">
+                                    </figure>
+                                </div>
+                                <div class="tile-content container-fluid">
+                                    <div class="col-lg-12">
+                                        <a role="button" href="@block.Tweets.Skip(3).First().Url" target="_blank" aria-expanded="false">
+                                            <p>
+                                                <br />
+                                                <text class="card-title h4" style="color:black;">@block.Tweets.Skip(3).First().CreatedBy.Name  </text>
+                                                <text class="tile-subtitle text-muted">@String.Format("@{0} • {1}", block.Tweets.Skip(3).First().CreatedBy.ScreenName, String.Format("{0}h", DateTime.Now.Add(-block.Tweets.Skip(3).First().TweetLocalCreationDate.TimeOfDay).Hour))</text>
+                                            </p>
+                                            <p class="tile-content" style="color:black;">@block.Tweets.Skip(3).First().Text</p>
+                                            @if (block.Tweets.Skip(3).First().Media.Count > 0)
+                                            {<p class="tile-content"><img class="img-responsive" src="@block.Tweets.Skip(3).First().Media.First().MediaURLHttps" /></p>}
+                                        </a>
+                                        <b><span class="text-success fa fa-retweet"> </span><text class="text-success"> @String.Format("{0:n0}", block.Tweets.Skip(3).First().RetweetCount) </text><span>  </span><span class="text-danger fa fa-heart"> </span><text class="text-danger"> @String.Format("{0:n0}", block.Tweets.Skip(3).First().FavoriteCount)</text></b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="tile">
+                                <div class="tile-icon">
+                                    <figure class="avatar avatar-xl">
+                                        <img src="@block.Tweets.Skip(4).First().CreatedBy.ProfileImageUrl400x400">
+                                    </figure>
+                                </div>
+                                <div class="tile-content container-fluid">
+                                    <div class="col-lg-12">
+                                        <a role="button" href="@block.Tweets.Skip(4).First().Url" target="_blank" aria-expanded="false">
+                                            <p>
+                                                <br />
+                                                <text class="card-title h4" style="color:black;">@block.Tweets.Skip(4).First().CreatedBy.Name  </text>
+                                                <text class="tile-subtitle text-muted">@String.Format("@{0} • {1}", block.Tweets.Skip(4).First().CreatedBy.ScreenName, String.Format("{0}h", DateTime.Now.Add(-block.Tweets.Skip(4).First().TweetLocalCreationDate.TimeOfDay).Hour))</text>
+                                            </p>
+                                            <p class="tile-content" style="color:black;">@block.Tweets.Skip(4).First().Text</p>
+                                            @if (block.Tweets.Skip(4).First().Media.Count > 0)
+                                            {<p class="tile-content"><img class="img-responsive" src="@block.Tweets.Skip(4).First().Media.First().MediaURLHttps" /></p>}
+                                        </a>
+                                        <b><span class="text-success fa fa-retweet"> </span><text class="text-success"> @String.Format("{0:n0}", block.Tweets.Skip(4).First().RetweetCount) </text><span>  </span><span class="text-danger fa fa-heart"> </span><text class="text-danger"> @String.Format("{0:n0}", block.Tweets.Skip(4).First().FavoriteCount)</text></b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="tile">
+                                <div class="tile-icon">
+                                    <figure class="avatar avatar-xl">
+                                        <img src="@block.Tweets.Skip(5).First().CreatedBy.ProfileImageUrl400x400">
+                                    </figure>
+                                </div>
+                                <div class="tile-content container-fluid">
+                                    <div class="col-lg-12">
+                                        <a role="button" href="@block.Tweets.Skip(5).First().Url" target="_blank" aria-expanded="false">
+                                            <p>
+                                                <br />
+                                                <text class="card-title h4" style="color:black;">@block.Tweets.Skip(5).First().CreatedBy.Name  </text>
+                                                <text class="tile-subtitle text-muted">@String.Format("@{0} • {1}", block.Tweets.Skip(5).First().CreatedBy.ScreenName, String.Format("{0}h", DateTime.Now.Add(-block.Tweets.Skip(5).First().TweetLocalCreationDate.TimeOfDay).Hour))</text>
+                                            </p>
+                                            <p class="tile-content" style="color:black;">@block.Tweets.Skip(5).First().Text</p>
+                                            @if (block.Tweets.Skip(5).First().Media.Count > 0)
+                                            {<p class="tile-content"><img class="img-responsive" src="@block.Tweets.Skip(5).First().Media.First().MediaURLHttps" /></p>}
+                                        </a>
+                                        <b><span class="text-success fa fa-retweet"> </span><text class="text-success"> @String.Format("{0:n0}", block.Tweets.Skip(5).First().RetweetCount) </text><span>  </span><span class="text-danger fa fa-heart"> </span><text class="text-danger"> @String.Format("{0:n0}", block.Tweets.Skip(5).First().FavoriteCount)</text></b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <a class="card-header" role="button" data-toggle="collapse" href="#card-@block.Articles.Skip(1).First().AID" aria-expanded="false">
+                                <div class="card-image"><img class="img-responsive" src="@block.Articles.Skip(1).First().URlToImage" /></div>
+                                <div class="pull-right" aria-expanded="false">
+                                    <span class="fa fa-angle-down large"></span>
+                                </div> <div class="card-title h4" style="color:black;">@block.Articles.Skip(1).First().Title</div>
+                                <text class="text-muted pull-right">@String.Format("{0}h ago", DateTime.Now.Add(-block.Articles.Skip(1).First().PublishedAt.Value.TimeOfDay).Hour)</text>
+                                <text class="text-muted">@Model.FollowedSources.Where(x => x.PID.Equals(block.Articles.Skip(1).First().PID)).Select(x => x.Name).First()</text>
+                            </a>
+                            <br />
+                            <div id="card-@block.Articles.Skip(1).First().AID" class="collapse">
+                                <div class="container-fluid">
+                                    <p class="card-text" style="color:black;">@block.Articles.Skip(1).First().Description</p>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="pull-left">
+                                        <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
+                                        <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
+                                    </div>
+                                    <div class="pull-right">
+                                        <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
+                                        <a role="button" class="btn btn-primary" href="@block.Articles.Skip(1).First().URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </row>
             </div>
         }
-        <br />
-    }
-</div>
-
+    </div>
+    <div id="News" hidden="hidden">
+        @foreach (var source in Model.FollowedSources)
+        {
+            if (Model.Publisher_Articles.Where(x => x.PID.Equals(source.PID)).Count() > 6)
+            {
+                <div class="container-fluid" id="panel">
+                    <div class="row"><div class="h1 text-capitalize pull-right" id="panel-@source.PID">@source.Name.</div></div>
+                    <div class="">
+                        @{ var articles = Model.Publisher_Articles.Where(x => x.PID.Equals(source.PID)).OrderBy(x => DateTime.Now.Add(-x.PublishedAt.Value.TimeOfDay).Hour).Take(6).ToArray();
+                            for (int i = 0; i < 4; i += 4)
+                            {
+                                <row class="col-lg-12">
+                                    <div class="col-lg-6" id="@articles[i].AID">
+                                        <div class="card">
+                                            <a class="card-header" role="button" data-toggle="collapse" href="#card-@articles[i].AID" aria-expanded="false">
+                                                <div class="card-image"><img class="img-responsive" src="@articles[i].URlToImage" /></div>
+                                                <div class="pull-right" aria-expanded="false">
+                                                    <span class="fa fa-angle-down large"></span>
+                                                </div> <div class="card-title h4" style="color:black;">@articles[i].Title</div>
+                                                <text class="text-muted pull-right">@String.Format("{0}h ago", DateTime.Now.Add(-articles[i].PublishedAt.Value.TimeOfDay).Hour)</text>
+                                                <text class="text-muted">@articles[i].Author</text>
+                                            </a>
+                                            <br />
+                                            <div id="card-@articles[i].AID" class="collapse">
+                                                <div class="container-fluid">
+                                                    <p class="card-text" style="color:black;">@articles[i].Description</p>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="pull-left">
+                                                        <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
+                                                        <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
+                                                    </div>
+                                                    <div class="pull-right">
+                                                        <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
+                                                        <a role="button" class="btn btn-primary" href="@articles[i].URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" id="@articles[i+1].AID">
+                                        <div class="card">
+                                            <a class="card-header" role="button" data-toggle="collapse" href="#card-@articles[i+1].AID" aria-expanded="false">
+                                                <div class="card-image"><img class="img-responsive" src="@articles[i+1].URlToImage" /></div>
+                                                <div class="pull-right" aria-expanded="false">
+                                                    <span class="fa fa-angle-down large"></span>
+                                                </div><div class="card-title h4" style="color:black;">@articles[i + 1].Title</div>
+                                                <text class="text-muted pull-right">@String.Format("{0}h ago", DateTime.Now.Add(-articles[i + 1].PublishedAt.Value.TimeOfDay).Hour)</text>
+                                                <text class="text-muted">@articles[i + 1].Author</text>
+                                            </a>
+                                            <br />
+                                            <div id="card-@articles[i+1].AID" class="collapse">
+                                                <div class="container-fluid">
+                                                    <p class="card-text" style="color:black;">@articles[i + 1].Description</p>
+                                                </div>
+                                                <div class="col-lg-12">
+                                                    <div class="pull-left">
+                                                        <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
+                                                        <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
+                                                    </div>
+                                                    <div class="pull-right">
+                                                        <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
+                                                        <a role="button" class="btn btn-primary" href="@articles[i+1].URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </row>
+                                <row class="col-lg-12">
+                                    <div class="col-lg-6" id="@articles[i+2].AID">
+                                        <div class="card">
+                                            <div class="tile">
+                                                <div class="tile-icon">
+                                                    <figure class="avatar avatar-xl">
+                                                        <img src="@articles[i+2].URlToImage">
+                                                    </figure>
+                                                </div>
+                                                <div class="tile-content container-fluid">
+                                                    <div class="col-lg-12">
+                                                        <a role="button" data-toggle="collapse" href="#card-@articles[i+2].AID" aria-expanded="false">
+                                                            <div class="pull-right" role="button" data-toggle="collapse" href="#card-@articles[i+2].AID" aria-expanded="false">
+                                                                <span class="fa fa-angle-down large"></span>
+                                                            </div>
+                                                            <p class="card-title h4" style="color:black;">@articles[i + 2].Title</p>
+                                                            <p class="tile-subtitle text-muted">@String.Format("{0}h ago", DateTime.Now.Add(-articles[i + 2].PublishedAt.Value.TimeOfDay).Hour)</p>
+                                                        </a>
+                                                    </div>
+                                                    <br />
+                                                    <div id="card-@articles[i+2].AID" class="collapse tile-content">
+                                                        <div class="container-fluid">
+                                                            <p class="card-text" style="color:black;">@articles[i + 2].Description</p>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div class="pull-left">
+                                                                <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
+                                                                <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
+                                                            </div>
+                                                            <div class="pull-right">
+                                                                <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
+                                                                <a role="button" class="btn btn-primary" href="@articles[i+2].URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" id="@articles[i+3].AID">
+                                        <div class="card">
+                                            <div class="tile">
+                                                <div class="tile-icon">
+                                                    <figure class="avatar avatar-xl">
+                                                        <img src="@articles[i+3].URlToImage">
+                                                    </figure>
+                                                </div>
+                                                <div class="tile-content container-fluid">
+                                                    <div class="col-lg-12">
+                                                        <a role="button" data-toggle="collapse" href="#card-@articles[i+3].AID" aria-expanded="false">
+                                                            <div class="pull-right" role="button" data-toggle="collapse" href="#card-@articles[i+3].AID" aria-expanded="false">
+                                                                <span class="fa fa-angle-down large"></span>
+                                                            </div>
+                                                            <p class="card-title h4" style="color:black;">@articles[i + 3].Title</p>
+                                                            <p class="tile-subtitle text-muted">@String.Format("{0}h ago", DateTime.Now.Add(-articles[i + 3].PublishedAt.Value.TimeOfDay).Hour)</p>
+                                                        </a>
+                                                    </div>
+                                                    <br />
+                                                    <div id="card-@articles[i+3].AID" class="collapse tile-content">
+                                                        <div class="container-fluid">
+                                                            <p class="card-text" style="color:black;">@articles[i + 3].Description</p>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div class="pull-left">
+                                                                <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
+                                                                <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
+                                                            </div>
+                                                            <div class="pull-right">
+                                                                <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
+                                                                <a role="button" class="btn btn-primary" href="@articles[i+3].URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </row>
+                                <row class="col-lg-12">
+                                    <div class="col-lg-6" id="@articles[i+4].AID">
+                                        <div class="card">
+                                            <div class="tile">
+                                                <div class="tile-icon">
+                                                    <figure class="avatar avatar-xl">
+                                                        <img src="@articles[i+4].URlToImage">
+                                                    </figure>
+                                                </div>
+                                                <div class="tile-content container-fluid">
+                                                    <div class="col-lg-12">
+                                                        <a role="button" data-toggle="collapse" href="#card-@articles[i+4].AID" aria-expanded="false">
+                                                            <div class="pull-right" role="button" data-toggle="collapse" href="#card-@articles[i+4].AID" aria-expanded="false">
+                                                                <span class="fa fa-angle-down large"></span>
+                                                            </div>
+                                                            <p class="card-title h4" style="color:black;">@articles[i + 4].Title</p>
+                                                            <p class="tile-subtitle text-muted">@String.Format("{0}h ago", DateTime.Now.Add(-articles[i + 4].PublishedAt.Value.TimeOfDay).Hour)</p>
+                                                        </a>
+                                                    </div>
+                                                    <br />
+                                                    <div id="card-@articles[i+4].AID" class="collapse tile-content">
+                                                        <div class="container-fluid">
+                                                            <p class="card-text" style="color:black;">@articles[i + 4].Description</p>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div class="pull-left">
+                                                                <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
+                                                                <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
+                                                            </div>
+                                                            <div class="pull-right">
+                                                                <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
+                                                                <a role="button" class="btn btn-primary" href="@articles[i+4].URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6" id="@articles[i+5].AID">
+                                        <div class="card">
+                                            <div class="tile">
+                                                <div class="tile-icon">
+                                                    <figure class="avatar avatar-xl">
+                                                        <img src="@articles[i+5].URlToImage">
+                                                    </figure>
+                                                </div>
+                                                <div class="tile-content container-fluid">
+                                                    <div class="col-lg-12">
+                                                        <a role="button" data-toggle="collapse" href="#card-@articles[i+5].AID" aria-expanded="false">
+                                                            <div class="pull-right" role="button" data-toggle="collapse" href="#card-@articles[i+5].AID" aria-expanded="false">
+                                                                <span class="fa fa-angle-down large"></span>
+                                                            </div>
+                                                            <p class="card-title h4" style="color:black;">@articles[i + 5].Title</p>
+                                                            <p class="tile-subtitle text-muted">@String.Format("{0}h ago", DateTime.Now.Add(-articles[i + 5].PublishedAt.Value.TimeOfDay).Hour)</p>
+                                                        </a>
+                                                    </div>
+                                                    <br />
+                                                    <div id="card-@articles[i+5].AID" class="collapse tile-content">
+                                                        <div class="container-fluid">
+                                                            <p class="card-text" style="color:black;">@articles[i + 5].Description</p>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div class="pull-left">
+                                                                <div class="btn"><span class="fa fa-thumbs-up large text-success"></span></div>
+                                                                <div class="btn"><span class="fa fa-thumbs-down large text-danger"></span></div>
+                                                            </div>
+                                                            <div class="pull-right">
+                                                                <div class="btn"><span class="fa fa-bookmark large text-primary"></span></div>
+                                                                <a role="button" class="btn btn-primary" href="@articles[i+5].URL" target="_blank">Read <span class="fa fa-external-link"></span></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </row>
+                            }
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-offset-3">
+                            <div class="pull-right btn btn-success btn-block" href="#"><text class="h4">Load More @source.Name</text></div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+            }
+            <br />
+        }
+    </div>
 <script>
     $(document).ready(function () {
         $("#Feed").addClass('active');
+        $('#feedNav').show();
     });
 </script>
