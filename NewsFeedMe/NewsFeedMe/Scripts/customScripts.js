@@ -9,10 +9,13 @@
         $('#Desktop-Sources').hide();
         $('#Desktop-Custom').hide();
 
-        //$('*#panel').removeClass('container-fluid');
+        $('*#panel').removeClass('container-fluid');
+        $('#Publishers').removeClass('container-fluid');
+        $('#Categories').removeClass('container-fluid');
+
         $('#body').removeClass('container');
         $('#body').removeClass('body-content');
-
+        
         $('#feedNav').addClass('navbar-fixed-bottom');
     }
     else { $('#Login-Partial').show(); }
@@ -184,7 +187,8 @@ $(function () {
             },
            success: function (response) {
                if (response.success) {
-                   window.location.reload(true);
+                   window.location.reload(true); 
+                   $('html, body').animate({ scrollTop: 0 }, 'fast');
                }
            }
         });
@@ -201,7 +205,8 @@ $(function () {
             },
             success: function (response) {
                 if (response.success) {
-                    window.location.reload(true);
+                    window.location.reload(true);  
+                    $('html, body').animate({ scrollTop: 0 }, 'fast');
                 }
             }
         });

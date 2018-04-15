@@ -20,9 +20,9 @@
 <div class="container">
     <h3 class="text-capitalize text-center h2">Follow topics, news sources or whatever tickles your fancy</h3>
     <div class="row">
-        <div class="col-lg-6 col-lg-offset-3">
+        @*<div class="col-lg-6 col-lg-offset-3">
             <input id="searchBar" type="text" class="form-control" placeholder="Search" style="max-width:none">
-        </div>
+        </div>*@
     </div>
     <br />
     @if (Model.FollowedSources.Count > 0 || Model.FollowedTopics.Count > 0)
@@ -44,7 +44,7 @@
             </div>
         </div>
     }
-    <div class="row">
+    <div class="row"  id="test">
         <div class="col-md-offset-3 col-md-6 panel panel-body" role="alert" hidden="hidden" id="topicsWindow">
             <div class="container-fluid">
                 <div class="row"><b>Add: </b><div class="pull-right btn btn-success" id="saveFollowing" data-request-url="@Url.Content("~/Manage/SaveFollowing")"><b>Follow!</b></div></div>
@@ -203,10 +203,13 @@
         window.onscroll = function () { scrollFunction() };
 
         function scrollFunction() {
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
                 document.getElementById("myBtn").style.display = "block";
+                $('#test').addClass('navbar-fixed-top');
+                $('#test').css('top', '60px');
             } else {
                 document.getElementById("myBtn").style.display = "none";
+                $('#test').removeClass('navbar-fixed-top');
             }
         }
 
