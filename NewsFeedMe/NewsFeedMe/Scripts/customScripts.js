@@ -139,6 +139,7 @@ $(function () {
             deleteIDList.push(id);
 
             $(this).css('background-color', '#f9243f');
+            $(this).children("span").removeClass('fa-times').addClass('fa-exclamation');
         }
         else {
             deleteIDList = $.grep(deleteIDList, function (value) {
@@ -150,6 +151,7 @@ $(function () {
             });
             
             $(this).css('background-color', '#30a5ff');
+            $(this).children("span").removeClass('fa-exclamation').addClass('fa-times');
 
             if (deleteList.length === 0) {
                 $('#deleteFollowing').hide();
@@ -214,4 +216,8 @@ $(function () {
             
         });
     })
+
+    if (top.location.pathname === '/Manage/Following') {
+        
+    }
 });

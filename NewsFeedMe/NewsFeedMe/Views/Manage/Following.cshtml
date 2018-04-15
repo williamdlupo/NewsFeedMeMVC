@@ -34,9 +34,9 @@
                     <div class="row col-lg-offset-1 col-lg-11">
                         <b>
                             @foreach (var cat in Model.FollowedTopics)
-                            {<span class="chip text-capitalize" role="button" id="@cat.CID">@cat.CID <span class="fa fa-times pull-right"></span></span>}
+                            {<span class="chip text-capitalize" role="button" title="Click To Unfollow" id="@cat.CID">@cat.CID <span class="fa fa-times pull-right"></span></span>}
                             @foreach (var source in Model.FollowedSources)
-                            {<span class="chip text-capitalize" role="button" id="@source.PID">@source.Name <span class="fa fa-times pull-right"></span></span>}
+                            {<span class="chip text-capitalize" role="button" title="Click To Unfollow" id="@source.PID">@source.Name <span class="fa fa-times pull-right"></span></span>}
                         </b>
                     </div>
                     <div class="row" hidden="hidden" id="deleteFollowing"><br /><div class="pull-right btn btn-danger" id="deleteFollowingBtn" data-request-url="@Url.Content("~/Manage/DeleteFollowing")"><b>Unfollow!</b></div></div>
@@ -87,7 +87,14 @@
                                 <p class="card-text">@Model.AllSources[i].Description</p>
                             </div>
                             <div class="card-footer">
-                                <button class="btn btn-primary btn-block" name="@Model.AllSources[i].Name" id="@Model.AllSources[i].PID"><span class="fa fa-plus"></span><text class="h4"> Follow</text></button>
+                                @if (Model.FollowedSources.Any(x => x.PID.Equals(Model.AllSources[i].PID)))
+                                {
+                                    <button class="btn btn-success btn-block" disabled name="@Model.AllSources[i].Name" id="@Model.AllSources[i].PID"><span class="fa fa-check"></span><text class="h4"> Following!</text></button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-primary btn-block" name="@Model.AllSources[i].Name" id="@Model.AllSources[i].PID"><span class="fa fa-plus"></span><text class="h4"> Follow</text></button>
+                                }
                             </div>
                         </div>
                     </div>
@@ -101,7 +108,14 @@
                                 <p class="card-text">@Model.AllSources[i + 1].Description</p>
                             </div>
                             <div class="card-footer">
-                                <button class="btn btn-primary btn-block" name="@Model.AllSources[i+1].Name" id="@Model.AllSources[i+1].PID"><span class="fa fa-plus"></span><text class="h4"> Follow</text></button>
+                                @if (Model.FollowedSources.Any(x => x.PID.Equals(Model.AllSources[i + 1].PID)))
+                                {
+                                    <button class="btn btn-success btn-block" disabled name="@Model.AllSources[i+1].Name" id="@Model.AllSources[i+1].PID"><span class="fa fa-check"></span><text class="h4"> Following!</text></button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-primary btn-block" name="@Model.AllSources[i+1].Name" id="@Model.AllSources[i+1].PID"><span class="fa fa-plus"></span><text class="h4"> Follow</text></button>
+                                }
                             </div>
                         </div>
                     </div> <div class="container-fluid col-sm-4">
@@ -114,7 +128,14 @@
                                 <p class="card-text">@Model.AllSources[i + 2].Description</p>
                             </div>
                             <div class="card-footer">
-                                <button class="btn btn-primary btn-block" name="@Model.AllSources[i+2].Name" id="@Model.AllSources[i+2].PID"><span class="fa fa-plus"></span><text class="h4"> Follow</text></button>
+                                @if (Model.FollowedSources.Any(x => x.PID.Equals(Model.AllSources[i + 2].PID)))
+                                {
+                                    <button class="btn btn-success btn-block" disabled name="@Model.AllSources[i+2].Name" id="@Model.AllSources[i+2].PID"><span class="fa fa-check"></span><text class="h4"> Following!</text></button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-primary btn-block" name="@Model.AllSources[i+2].Name" id="@Model.AllSources[i+2].PID"><span class="fa fa-plus"></span><text class="h4"> Follow</text></button>
+                                }
                             </div>
                         </div>
                     </div>
@@ -128,7 +149,14 @@
                     <div class="container-fluid col-sm-4">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title text-capitalize">@Model.AllTopics[i].CID <button class="btn btn-primary pull-right" name="@Model.AllTopics[i].CID" id="@Model.AllTopics[i].CID"><span class="fa fa-plus"></span><text class="h4"> Follow</text></button></h3>
+                                @if (Model.FollowedTopics.Any(x => x.CID.Equals(Model.AllTopics[i].CID)))
+                                {
+                                    <h3 class="card-title text-capitalize">@Model.AllTopics[i].CID <button class="btn btn-success pull-right" disabled name="@Model.AllTopics[i].CID" id="@Model.AllTopics[i].CID"><span class="fa fa-check"></span><text class="h4"> Following!</text></button></h3>
+                                }
+                                else
+                                {
+                                    <h3 class="card-title text-capitalize">@Model.AllTopics[i].CID <button class="btn btn-primary pull-right" name="@Model.AllTopics[i].CID" id="@Model.AllTopics[i].CID"><span class="fa fa-plus"></span><text class="h4"> Follow</text></button></h3>
+                                }
                             </div>
                             <div class="card-footer">
 
@@ -138,14 +166,27 @@
                     <div class="container-fluid col-sm-4">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title text-capitalize">@Model.AllTopics[i + 1].CID <button class="btn btn-primary pull-right" name="@Model.AllTopics[i+1].CID" id="@Model.AllTopics[i+1].CID"><span class="fa fa-plus"></span><text class="h4"> Follow</text></button></h3>
+                                @if (Model.FollowedTopics.Any(x => x.CID.Equals(Model.AllTopics[i + 1].CID)))
+                                {
+                                    <h3 class="card-title text-capitalize">@Model.AllTopics[i + 1].CID <button class="btn btn-success pull-right" disabled name="@Model.AllTopics[i+1].CID" id="@Model.AllTopics[i+1].CID"><span class="fa fa-check"></span><text class="h4"> Following!</text></button></h3>
+                                }
+                                else
+                                {
+                                    <h3 class="card-title text-capitalize">@Model.AllTopics[i + 1].CID <button class="btn btn-primary pull-right" name="@Model.AllTopics[i+1].CID" id="@Model.AllTopics[i+1].CID"><span class="fa fa-plus"></span><text class="h4"> Follow</text></button></h3>
+                                }
                             </div>
                         </div>
                     </div> <div class="container-fluid col-sm-4">
                         <div class="card">
                             <div class="card-header">
-
-                                <h3 class="card-title text-capitalize">@Model.AllTopics[i + 2].CID <button class="btn btn-primary pull-right" name="@Model.AllTopics[i+2].CID" id="@Model.AllTopics[i+2].CID"><span class="fa fa-plus"></span><text class="h4"> Follow</text></button></h3>
+                                @if (Model.FollowedTopics.Any(x => x.CID.Equals(Model.AllTopics[i+2].CID)))
+                                {
+                                    <h3 class="card-title text-capitalize">@Model.AllTopics[i+2].CID <button class="btn btn-success pull-right" disabled name="@Model.AllTopics[i+2].CID" id="@Model.AllTopics[i+2].CID"><span class="fa fa-check"></span><text class="h4"> Following!</text></button></h3>
+                                }
+                                else
+                                {
+                                    <h3 class="card-title text-capitalize">@Model.AllTopics[i+2].CID <button class="btn btn-primary pull-right" name="@Model.AllTopics[i+2].CID" id="@Model.AllTopics[i+2].CID"><span class="fa fa-plus"></span><text class="h4"> Follow</text></button></h3>
+                                }
                             </div>
                         </div>
                     </div>
