@@ -122,5 +122,31 @@ namespace NewsFeedMe
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Seed_Publisher", pIDParameter, nameParameter, descriptionParameter, uRLParameter);
         }
+    
+        public virtual int DeleteUser_Category(Nullable<long> userID, Nullable<int> categoryID)
+        {
+            var userIDParameter = userID.HasValue ?
+                new ObjectParameter("UserID", userID) :
+                new ObjectParameter("UserID", typeof(long));
+    
+            var categoryIDParameter = categoryID.HasValue ?
+                new ObjectParameter("CategoryID", categoryID) :
+                new ObjectParameter("CategoryID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteUser_Category", userIDParameter, categoryIDParameter);
+        }
+    
+        public virtual int DeleteUser_Publisher(Nullable<long> userID, string publisherID)
+        {
+            var userIDParameter = userID.HasValue ?
+                new ObjectParameter("UserID", userID) :
+                new ObjectParameter("UserID", typeof(long));
+    
+            var publisherIDParameter = publisherID != null ?
+                new ObjectParameter("PublisherID", publisherID) :
+                new ObjectParameter("PublisherID", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteUser_Publisher", userIDParameter, publisherIDParameter);
+        }
     }
 }

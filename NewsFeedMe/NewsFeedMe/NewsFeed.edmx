@@ -122,6 +122,14 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="DeleteUser_Category" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="bigint" Mode="In" />
+          <Parameter Name="CategoryID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteUser_Publisher" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="bigint" Mode="In" />
+          <Parameter Name="PublisherID" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="InsertUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Id" Type="bigint" Mode="In" />
           <Parameter Name="AccessToken" Type="nvarchar" Mode="In" />
@@ -253,6 +261,14 @@
             <End Role="User" EntitySet="Users" />
             <End Role="User_Publisher" EntitySet="User_Publisher" />
           </AssociationSet>
+          <FunctionImport Name="DeleteUser_Category">
+            <Parameter Name="UserID" Mode="In" Type="Int64" />
+            <Parameter Name="CategoryID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteUser_Publisher">
+            <Parameter Name="UserID" Mode="In" Type="Int64" />
+            <Parameter Name="PublisherID" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Publisher_Article">
           <Key>
@@ -461,6 +477,10 @@
                   <ScalarProperty Name="CategoryID" ParameterName="CategoryID" />
                   <ScalarProperty Name="UserID" ParameterName="UserID" />
                 </InsertFunction>
+                <DeleteFunction FunctionName="NewsFeed.DBModel.Store.DeleteUser_Category">
+                  <ScalarProperty Name="CategoryID" ParameterName="CategoryID" />
+                  <ScalarProperty Name="UserID" ParameterName="UserID" />
+                </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -478,9 +498,15 @@
                   <ScalarProperty Name="PublisherID" ParameterName="PublisherID" />
                   <ScalarProperty Name="UserID" ParameterName="UserID" />
                 </InsertFunction>
+                <DeleteFunction FunctionName="NewsFeed.DBModel.Store.DeleteUser_Publisher">
+                  <ScalarProperty Name="PublisherID" ParameterName="PublisherID" />
+                  <ScalarProperty Name="UserID" ParameterName="UserID" />
+                </DeleteFunction>
               </ModificationFunctionMapping>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="DeleteUser_Category" FunctionName="NewsFeed.DBModel.Store.DeleteUser_Category" />
+          <FunctionImportMapping FunctionImportName="DeleteUser_Publisher" FunctionName="NewsFeed.DBModel.Store.DeleteUser_Publisher" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -106,8 +106,10 @@ namespace NewsFeedMe.Controllers
                     //                       })).ToList()
 
                 };
-                foreach(var source in feed.FollowedSources) { sourceText.Append(String.Format("{0},", source.PID)); }
+                feed.Publisher_Articles = new List<Publisher_Article>();
 
+                foreach (var source in feed.FollowedSources) { sourceText.Append(String.Format("{0},", source.PID)); }
+                
                 //grab 100 headlines based on the users interests
                 string newsRequest = String.Format("https://newsapi.org/v2/top-headlines?sources={0}&pagesize=100&apiKey=8919f2f78e174c058c8e9745f90524fa", sourceText.ToString());
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, newsRequest);
@@ -117,7 +119,6 @@ namespace NewsFeedMe.Controllers
                 {
                     var articleJSON = JObject.Parse(result.Content.ReadAsStringAsync().Result);
                     int count = 0;
-                    feed.Publisher_Articles = new List<Publisher_Article>();
                     foreach (var article in articleJSON["articles"])
                     {
                         feed.Publisher_Articles.Add(
@@ -137,7 +138,44 @@ namespace NewsFeedMe.Controllers
                     }
                 }
 
-                feed.Publisher_Articles = feed.Publisher_Articles.OrderBy(x=> Guid.NewGuid()).ToList(); 
+                sourceText.Clear();
+
+                ////grab articles based on user interests
+                //foreach (var cat in feed.FollowedTopics)
+                //{
+
+                //    string categoryRequest = String.Format("https://newsapi.org/v2/top-headlines?country=us&language=us&category={0}&apiKey=8919f2f78e174c058c8e9745f90524fa", cat.CID.ToString());
+                //    request = new HttpRequestMessage(HttpMethod.Get, categoryRequest);
+                //    result = await client.SendAsync(request);
+
+                //    if (result.IsSuccessStatusCode)
+                //    {
+                //        var articleJSON = JObject.Parse(result.Content.ReadAsStringAsync().Result);
+                //        int count = 0;
+                        
+                //        foreach (var article in articleJSON["articles"])
+                //        {
+                //            feed.Publisher_Articles.Add(
+                //                new Publisher_Article
+                //                {
+                //                    AID = count,
+                //                    PID = (string)article["source"]["id"],
+                //                    Author = (string)article["author"],
+                //                    Title = (string)article["title"],
+                //                    Description = (string)article["description"],
+                //                    URL = (string)article["url"],
+                //                    URlToImage = (string)article["urlToImage"],
+                //                    PublishedAt = (DateTime)article["publishedAt"]
+
+                //                });
+                //            count++;
+                //        }
+                //    }
+                //}
+
+                //shuffle order of articles
+                feed.Publisher_Articles = feed.Publisher_Articles.OrderBy(x => Guid.NewGuid()).ToList();
+
                 //aggregate news articles and tweets into content block objects
                 List<ContentBlock> contentBlocks = new List<ContentBlock>();
                 for (int i = 0; i< userTimeline.Length && i< feed.Publisher_Articles.Count;i+=6)

@@ -19,4 +19,9 @@ namespace NewsFeedMe.Models
         public string Name { get; set; }
         public string Type { get; set; }
     }
+
+    public class DeleteFollowingModel
+    {
+        public string Id { get; set; }
+    }
 }

@@ -66,6 +66,43 @@ namespace NewsFeedMe.Controllers
                 return View(following);
             }
         }
+        
+        [HttpPost]
+        public async Task<ActionResult> DeleteFollowing(DeleteFollowingModel[] deleteList)
+        {
+            using (var context = new EntityFramework())
+            {
+                long user = context.Users.Where(x => x.ScreenName.Equals(User.Identity.Name)).Select(x => x.Id).FirstOrDefault();
+
+                List<Category> AllTopics = ((from top in context.Set<Category>()
+                                             select new
+                                             {
+                                                 top.ID,
+                                                 top.CID,
+                                                 top.Country
+                                             }).ToList()
+                                        .Select(x => new Category { ID = x.ID, CID = x.CID, Country = x.Country })).ToList();
+
+                foreach (var topic in deleteList)
+                {
+                    //test if the id is a topic vs a news source
+                    if (AllTopics.Any(x => x.CID.Equals(topic.Id)))
+                    {
+                        context.DeleteUser_Category(user, AllTopics.Where(x => x.CID.Equals(topic.Id)).Select(y => y.ID).First());
+                        await context.SaveChangesAsync();
+                    }
+
+                    else
+                    {
+                        context.DeleteUser_Publisher(user, topic.Id);
+                        await context.SaveChangesAsync();
+                    }
+                }
+                
+                TempData["result"] = "Interests saved!";
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            }
+        }
 
         [HttpPost]
         public async Task<ActionResult> SaveFollowing(SaveFollowingModel[] topicList)

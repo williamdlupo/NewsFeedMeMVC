@@ -36,6 +36,8 @@
 $(function () {
     var topicList = [];
     var idList = [];
+    var deleteList = [];
+    var deleteIDList = [];
 
     $('#Publishers button').click(function () {
         var id = $(this).attr('id');
@@ -126,6 +128,35 @@ $(function () {
         }
     });
 
+    $('#followedTopics span').click(function () {
+        var id = $(this).attr('id');
+        var topic = { 'Id': id };
+
+        $('#deleteFollowing').show();
+
+        if ($.inArray(id, deleteIDList) === -1) {
+            deleteList.push(topic);
+            deleteIDList.push(id);
+
+            $(this).css('background-color', '#f9243f');
+        }
+        else {
+            deleteIDList = $.grep(deleteIDList, function (value) {
+                return value !== id;
+            });
+
+            deleteList = deleteList.filter(function (el) {
+                return el.Id !== id;
+            });
+            
+            $(this).css('background-color', '#30a5ff');
+
+            if (deleteList.length === 0) {
+                $('#deleteFollowing').hide();
+            }
+        }
+    });
+
     $('#categorySwap').click(function () {
         $(this).removeClass('btn-default').addClass('btn-primary');
         $('#newsSwap').removeClass('btn-primary').addClass('btn-default');
@@ -154,6 +185,23 @@ $(function () {
                    window.location.reload(true);
                }
            }
+        });
+    });
+
+    $("#deleteFollowingBtn").click(async function () {
+        var url = $(this).data('request-url');
+
+        await $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                deleteList: deleteList
+            },
+            success: function (response) {
+                if (response.success) {
+                    window.location.reload(true);
+                }
+            }
         });
     });
 

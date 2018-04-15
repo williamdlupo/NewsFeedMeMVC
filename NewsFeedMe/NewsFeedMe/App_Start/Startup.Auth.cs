@@ -18,7 +18,6 @@ namespace NewsFeedMe.App_Start
                 AuthenticationType = "ExternalCookie",
                 AuthenticationMode = Microsoft.Owin.Security.AuthenticationMode.Active,
                 CookieName = ".AspNet.ExternalCookie",
-                ExpireTimeSpan = TimeSpan.FromMinutes(10),
                 LogoutPath = new PathString("/Account/LogOff"),
                 LoginPath = new PathString("/Account/Login")
             };

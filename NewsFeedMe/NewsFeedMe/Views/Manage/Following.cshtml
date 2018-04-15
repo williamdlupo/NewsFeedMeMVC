@@ -28,17 +28,18 @@
     @if (Model.FollowedSources.Count > 0 || Model.FollowedTopics.Count > 0)
     {
         <div class="row">
-            <div class="col-md-offset-3 col-md-6 panel panel-body" role="alert">
+            <div class="col-md-offset-3 col-md-6 panel panel-body" role="alert" id="followedTopics">
                 <div class="container-fluid">
                     <div class="row"><b>Following: </b></div>
                     <div class="row col-lg-offset-1 col-lg-11">
                         <b>
                             @foreach (var cat in Model.FollowedTopics)
-                            {<span class="chip text-capitalize" role="button">@cat.CID</span>}
+                            {<span class="chip text-capitalize" role="button" id="@cat.CID">@cat.CID <span class="fa fa-times pull-right"></span></span>}
                             @foreach (var source in Model.FollowedSources)
-                            {<span class="chip" role="button">@source.Name</span>}
+                            {<span class="chip text-capitalize" role="button" id="@source.PID">@source.Name <span class="fa fa-times pull-right"></span></span>}
                         </b>
                     </div>
+                    <div class="row" hidden="hidden" id="deleteFollowing"><br /><div class="pull-right btn btn-danger" id="deleteFollowingBtn" data-request-url="@Url.Content("~/Manage/DeleteFollowing")"><b>Unfollow!</b></div></div>
                 </div>
             </div>
         </div>
@@ -46,7 +47,7 @@
     <div class="row">
         <div class="col-md-offset-3 col-md-6 panel panel-body" role="alert" hidden="hidden" id="topicsWindow">
             <div class="container-fluid">
-                <div class="row"><b>Add: </b><div class="pull-right btn btn-success" id="saveFollowing" data-request-url="@Url.Content("~/Manage/SaveFollowing")">Save</div></div>
+                <div class="row"><b>Add: </b><div class="pull-right btn btn-success" id="saveFollowing" data-request-url="@Url.Content("~/Manage/SaveFollowing")"><b>Follow!</b></div></div>
                 <div class="row"><span class="text-danger" id="warning" hidden="hidden"><b>Woah!</b> You're not following anything. There must be <em>something</em> you're interested in</span></div>
                 <div class="row col-lg-offset-1 col-lg-11"><b id="selectedTopics"></b></div>
             </div>
