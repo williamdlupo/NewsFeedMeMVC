@@ -29,10 +29,10 @@ namespace NewsFeedMe
     
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Publisher> Publishers { get; set; }
-        public virtual DbSet<Publisher_Article> Publisher_Article { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<User_Category> User_Category { get; set; }
         public virtual DbSet<User_Publisher> User_Publisher { get; set; }
+        public virtual DbSet<Bookmarked_Article> Bookmarked_Article { get; set; }
     
         public virtual int InsertUser(Nullable<long> id, string accessToken, string secret, string service, string screenName, string profilePic)
         {
@@ -147,6 +147,43 @@ namespace NewsFeedMe
                 new ObjectParameter("PublisherID", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteUser_Publisher", userIDParameter, publisherIDParameter);
+        }
+    
+        public virtual int InsertBookmarked_Article(string sourceName, Nullable<long> userID, string author, string title, string description, string uRL, string uRLToImage, Nullable<System.DateTime> date)
+        {
+            var sourceNameParameter = sourceName != null ?
+                new ObjectParameter("SourceName", sourceName) :
+                new ObjectParameter("SourceName", typeof(string));
+    
+            var userIDParameter = userID.HasValue ?
+                new ObjectParameter("UserID", userID) :
+                new ObjectParameter("UserID", typeof(long));
+    
+            var authorParameter = author != null ?
+                new ObjectParameter("Author", author) :
+                new ObjectParameter("Author", typeof(string));
+    
+            var titleParameter = title != null ?
+                new ObjectParameter("Title", title) :
+                new ObjectParameter("Title", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var uRLParameter = uRL != null ?
+                new ObjectParameter("URL", uRL) :
+                new ObjectParameter("URL", typeof(string));
+    
+            var uRLToImageParameter = uRLToImage != null ?
+                new ObjectParameter("URLToImage", uRLToImage) :
+                new ObjectParameter("URLToImage", typeof(string));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertBookmarked_Article", sourceNameParameter, userIDParameter, authorParameter, titleParameter, descriptionParameter, uRLParameter, uRLToImageParameter, dateParameter);
         }
     }
 }

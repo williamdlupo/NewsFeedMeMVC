@@ -9,13 +9,13 @@ namespace NewsFeedMe.Models
     {
         public List<Publisher> FollowedSources;
         public List<Category> FollowedTopics;
-        public List<Publisher_Article> Publisher_Articles;
+        public List<Bookmarked_Article> Articles;
         public List<ContentBlock> MixedFeed;
     }
 
     public class ContentBlock
     {
-        public List<Publisher_Article> Articles;
+        public List<Bookmarked_Article> Articles;
         public List<Tweetinvi.Models.ITweet> Tweets;
     }
 }

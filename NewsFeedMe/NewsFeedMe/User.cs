@@ -19,6 +19,7 @@ namespace NewsFeedMe
         {
             this.User_Category = new HashSet<User_Category>();
             this.User_Publisher = new HashSet<User_Publisher>();
+            this.Bookmarked_Article = new HashSet<Bookmarked_Article>();
         }
     
         public long Id { get; set; }
@@ -32,5 +33,7 @@ namespace NewsFeedMe
         public virtual ICollection<User_Category> User_Category { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<User_Publisher> User_Publisher { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Bookmarked_Article> Bookmarked_Article { get; set; }
     }
 }

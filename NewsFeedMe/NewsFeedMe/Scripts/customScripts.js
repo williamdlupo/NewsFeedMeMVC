@@ -28,7 +28,7 @@
         $('html, body').animate({ scrollTop: 0 }, 'fast');
     });
     $('#newsBtn').click(function () {
-        $(this).removeClass('btn-default').addClass('btn-primary').addClass('container-fluid');
+        $(this).removeClass('btn-default').addClass('btn-primary');
         $('#feedBtn').removeClass('btn-primary').addClass('btn-default');
         $('#Mixed').hide();
         $('#News').show();
@@ -205,8 +205,9 @@ $(function () {
             },
             success: function (response) {
                 if (response.success) {
-                    window.location.reload(true);  
                     $('html, body').animate({ scrollTop: 0 }, 'fast');
+                    window.location.reload(true);  
+                    
                 }
             }
         });
@@ -221,8 +222,4 @@ $(function () {
             
         });
     })
-
-    if (top.location.pathname === '/Manage/Following') {
-        
-    }
 });

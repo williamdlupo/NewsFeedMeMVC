@@ -12,17 +12,18 @@ namespace NewsFeedMe
     using System;
     using System.Collections.Generic;
     
-    public partial class Publisher_Article
+    public partial class Bookmarked_Article
     {
         public int AID { get; set; }
-        public string PID { get; set; }
+        public string SourceName { get; set; }
         public string Author { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string URL { get; set; }
         public string URlToImage { get; set; }
-        public Nullable<System.DateTime> PublishedAt { get; set; }
+        public Nullable<System.DateTime> PublishedDate { get; set; }
+        public long UserID { get; set; }
     
-        public virtual Publisher Publisher { get; set; }
+        public virtual User User { get; set; }
     }
 }

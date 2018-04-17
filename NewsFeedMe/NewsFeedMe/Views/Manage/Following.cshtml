@@ -39,7 +39,7 @@
                             {<span class="chip text-capitalize" role="button" title="Click To Unfollow" id="@source.PID">@source.Name <span class="fa fa-times pull-right"></span></span>}
                         </b>
                     </div>
-                    <div class="row" hidden="hidden" id="deleteFollowing"><br /><div class="pull-right btn btn-danger" id="deleteFollowingBtn" data-request-url="@Url.Content("~/Manage/DeleteFollowing")"><b>Unfollow!</b></div></div>
+                    <div class="row" hidden="hidden" id="deleteFollowing"><br /><div class="pull-right btn btn-danger" id="deleteFollowingBtn" data-request-url="@Url.Content("~/Manage/DeleteFollowing")"><b><span class="fa fa-trash"></span> Unfollow!</b></div></div>
                 </div>
             </div>
         </div>
@@ -47,7 +47,7 @@
     <div class="row"  id="test">
         <div class="col-md-offset-3 col-md-6 panel panel-body" role="alert" hidden="hidden" id="topicsWindow">
             <div class="container-fluid">
-                <div class="row"><b>Add: </b><div class="pull-right btn btn-success" id="saveFollowing" data-request-url="@Url.Content("~/Manage/SaveFollowing")"><b>Follow!</b></div></div>
+                <div class="row"><b>Add: </b><div class="pull-right btn btn-success" id="saveFollowing" data-request-url="@Url.Content("~/Manage/SaveFollowing")"><b><span class="glyphicon glyphicon-saved"></span> Follow!</b></div></div>
                 <div class="row"><span class="text-danger" id="warning" hidden="hidden"><b>Woah!</b> You're not following anything. There must be <em>something</em> you're interested in</span></div>
                 <div class="row col-lg-offset-1 col-lg-11"><b id="selectedTopics"></b></div>
             </div>
@@ -66,7 +66,7 @@
                         <button type="button" class="btn btn-primary" id="newsSwap"><span class="fa fa-newspaper-o large"></span><b id="Desktop-Sources" class="h3"> News Sources</b></button>
                     </div>
                     <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-default" id="customSwap"><span class="fa fa-edit large"></span><b id="Desktop-Custom" class="h3"> Custom</b></button>
+                        <button type="button" class="btn btn-default" id="customSwap"><span class="fa fa-star large"></span><b id="Desktop-Custom" class="h3"> Custom</b></button>
                     </div>
                 </div>
             </div>
@@ -203,7 +203,7 @@
         window.onscroll = function () { scrollFunction() };
 
         function scrollFunction() {
-            if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+            if (document.body.scrollTop > 312 || document.documentElement.scrollTop > 312) {
                 document.getElementById("myBtn").style.display = "block";
                 $('#test').addClass('navbar-fixed-top');
                 $('#test').css('top', '60px');

@@ -25,32 +25,39 @@ namespace NewsFeedMe.Controllers
         // GET: Feed
         public async Task<ActionResult> Home()
         {
-            //grab user access token and secret from claim
             var authenticateResult = await HttpContext.GetOwinContext().Authentication.AuthenticateAsync("ExternalCookie");
-            var oauthToken = authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == ("urn:twitter:access_token")).Value;
-            var oauthSecret = authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == ("urn:twitter:access_token_secret")).Value;
 
-            string Key = WebConfigurationManager.AppSettings["TwitterKey"];
-            string Secret = WebConfigurationManager.AppSettings["TwitterSecret"];
-
-            RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackAndAwait;
-
-            //access Twitter API and get user's current  home timeline
-            Auth.SetUserCredentials(Key, Secret, oauthToken, oauthSecret);
-            var twitterUser = Tweetinvi.User.GetAuthenticatedUser();
-
-            // Get more control over the request with a HomeTimelineParameters
-            var homeTimelineParameter = new HomeTimelineParameters
+            if (Session["Tweets"] is null || (DateTime)Session["TwitterTimer"] < DateTime.Now.Subtract(new TimeSpan(0, 2, 0)))
             {
-                MaximumNumberOfTweetsToRetrieve = 100
-                
-            };
-                var userTimeline = (twitterUser.GetHomeTimeline(homeTimelineParameter)).ToArray();            
+                //grab user access token and secret from claim                
+                var oauthToken = authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == ("urn:twitter:access_token")).Value;
+                var oauthSecret = authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == ("urn:twitter:access_token_secret")).Value;
+
+                string Key = WebConfigurationManager.AppSettings["TwitterKey"];
+                string Secret = WebConfigurationManager.AppSettings["TwitterSecret"];
+
+                RateLimit.RateLimitTrackerMode = RateLimitTrackerMode.TrackAndAwait;
+
+                //access Twitter API and get user's current  home timeline
+                Auth.SetUserCredentials(Key, Secret, oauthToken, oauthSecret);
+                var twitterUser = Tweetinvi.User.GetAuthenticatedUser();
+
+                // Get more control over the request with a HomeTimelineParameters
+                var homeTimelineParameter = new HomeTimelineParameters
+                {
+                    MaximumNumberOfTweetsToRetrieve = 100
+
+                };
+                Session["Tweets"] = (twitterUser.GetHomeTimeline(homeTimelineParameter)).ToArray();
+                Session["TwitterTimer"] = DateTime.Now;
+            }
+
+            var userTimeline = Session["Tweets"] as Tweetinvi.Models.ITweet[];
 
             using (var context = new EntityFramework())
             {
                 //get the current userID
-                long user = context.Users.Where(x => x.ScreenName.Equals(User.Identity.Name)).Select(x => x.Id).FirstOrDefault();
+                long user = Convert.ToInt64(authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == "urn:twitter:userid").Value);
 
                 HttpClient client = new HttpClient();
                 StringBuilder sourceText = new StringBuilder();
@@ -76,37 +83,8 @@ namespace NewsFeedMe.Controllers
                                        .Contains(source.PID)
                                         select new { source.PID, source.Name })
                                       .ToList().Select(x => new Publisher { PID = x.PID, Name = x.Name })).ToList()
-                    //Publisher_Articles = ((from x in context.Set<Publisher_Article>()
-                    //                       where (
-                    //                                 (from sub in context.User_Publisher
-                    //                                  where sub.UserID.Equals(user)
-                    //                                  select sub.PublisherID)
-                    //                                  .ToList())
-                    //                     .Contains(x.PID)
-                    //                       select new
-                    //                       {
-                    //                           x.AID,
-                    //                           x.Author,
-                    //                           x.Description,
-                    //                           x.Title,
-                    //                           x.URL,
-                    //                           x.Publisher,
-                    //                           x.PublishedAt,
-                    //                           x.URlToImage
-                    //                       }).ToList().Select(x => new Publisher_Article
-                    //                       {
-                    //                           AID = x.AID,
-                    //                           Author = x.Author,
-                    //                           Description = x.Description,
-                    //                           Title = x.Title,
-                    //                           URL = x.URL,
-                    //                           Publisher = x.Publisher,
-                    //                           PublishedAt = x.PublishedAt,
-                    //                           URlToImage = x.URlToImage
-                    //                       })).ToList()
-
                 };
-                feed.Publisher_Articles = new List<Publisher_Article>();
+                feed.Articles = new List<Bookmarked_Article>();
 
                 foreach (var source in feed.FollowedSources) { sourceText.Append(String.Format("{0},", source.PID)); }
                 
@@ -121,17 +99,17 @@ namespace NewsFeedMe.Controllers
                     int count = 0;
                     foreach (var article in articleJSON["articles"])
                     {
-                        feed.Publisher_Articles.Add(
-                            new Publisher_Article
+                        feed.Articles.Add(
+                            new Bookmarked_Article
                             {
                                 AID = count,
-                                PID = (string)article["source"]["id"],
+                                SourceName = (string)article["source"]["id"],
                                 Author = (string)article["author"],
                                 Title = (string)article["title"],
                                 Description = (string)article["description"],
                                 URL = (string)article["url"],
                                 URlToImage = (string)article["urlToImage"],
-                                PublishedAt = (DateTime)article["publishedAt"]
+                                PublishedDate = (DateTime)article["publishedAt"]
 
                             });
                         count++;
@@ -140,49 +118,49 @@ namespace NewsFeedMe.Controllers
 
                 sourceText.Clear();
 
-                ////grab articles based on user interests
-                //foreach (var cat in feed.FollowedTopics)
-                //{
+                //grab 100 articles based on user interests
+                foreach (var cat in feed.FollowedTopics)
+                {
 
-                //    string categoryRequest = String.Format("https://newsapi.org/v2/top-headlines?country=us&language=us&category={0}&apiKey=8919f2f78e174c058c8e9745f90524fa", cat.CID.ToString());
-                //    request = new HttpRequestMessage(HttpMethod.Get, categoryRequest);
-                //    result = await client.SendAsync(request);
+                    string categoryRequest = String.Format("https://newsapi.org/v2/top-headlines?country=us&language=us&category={0}&pagesize=100&apiKey=8919f2f78e174c058c8e9745f90524fa", cat.CID.ToString());
+                    request = new HttpRequestMessage(HttpMethod.Get, categoryRequest);
+                    result = await client.SendAsync(request);
 
-                //    if (result.IsSuccessStatusCode)
-                //    {
-                //        var articleJSON = JObject.Parse(result.Content.ReadAsStringAsync().Result);
-                //        int count = 0;
-                        
-                //        foreach (var article in articleJSON["articles"])
-                //        {
-                //            feed.Publisher_Articles.Add(
-                //                new Publisher_Article
-                //                {
-                //                    AID = count,
-                //                    PID = (string)article["source"]["id"],
-                //                    Author = (string)article["author"],
-                //                    Title = (string)article["title"],
-                //                    Description = (string)article["description"],
-                //                    URL = (string)article["url"],
-                //                    URlToImage = (string)article["urlToImage"],
-                //                    PublishedAt = (DateTime)article["publishedAt"]
+                    if (result.IsSuccessStatusCode)
+                    {
+                        var articleJSON = JObject.Parse(result.Content.ReadAsStringAsync().Result);
+                        int count = 0;
 
-                //                });
-                //            count++;
-                //        }
-                //    }
-                //}
+                        foreach (var article in articleJSON["articles"])
+                        {
+                            feed.Articles.Add(
+                                new Bookmarked_Article
+                                {
+                                    AID = count,
+                                    SourceName = (string)article["source"]["name"],
+                                    Author = (string)article["author"],
+                                    Title = (string)article["title"],
+                                    Description = (string)article["description"],
+                                    URL = (string)article["url"],
+                                    URlToImage = (string)article["urlToImage"],
+                                    PublishedDate = (DateTime)article["publishedAt"]
+
+                                });
+                            count++;
+                        }
+                    }
+                }
 
                 //shuffle order of articles
-                feed.Publisher_Articles = feed.Publisher_Articles.OrderBy(x => Guid.NewGuid()).ToList();
+                feed.Articles = feed.Articles.OrderBy(x => Guid.NewGuid()).ToList();
 
                 //aggregate news articles and tweets into content block objects
                 List<ContentBlock> contentBlocks = new List<ContentBlock>();
-                for (int i = 0; i< userTimeline.Length && i< feed.Publisher_Articles.Count;i+=6)
+                for (int i = 0; i< userTimeline.Length && i< feed.Articles.Count;i+=6)
                 {
                     try
                     {
-                        var _artList = new List<Publisher_Article>() { feed.Publisher_Articles[i], feed.Publisher_Articles[i + 1] };
+                        var _artList = new List<Bookmarked_Article>() { feed.Articles[i], feed.Articles[i + 1] };
                         var _twList = new List<Tweetinvi.Models.ITweet>() { userTimeline[i], userTimeline[i + 1], userTimeline[i + 2], userTimeline[i + 3], userTimeline[i + 4], userTimeline[i + 5] };
 
                         contentBlocks.Add(
