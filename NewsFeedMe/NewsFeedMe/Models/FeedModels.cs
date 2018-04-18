@@ -10,6 +10,7 @@ namespace NewsFeedMe.Models
         public List<Publisher> FollowedSources;
         public List<Category> FollowedTopics;
         public List<Bookmarked_Article> Articles;
+        public List<Bookmarked_Article> Bookmarked_Articles;
         public List<ContentBlock> MixedFeed;
     }
 

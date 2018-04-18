@@ -1,10 +1,93 @@
-﻿
+﻿@model NewsFeedMe.Models.BookmarkModel
+@{
+    ViewBag.Title = "Feed";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 @{
     ViewBag.Title = "Bookmarks";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Bookmarks</h2>
+<div class="container" id="panel">
+    <h3 class="text-capitalize text-center h2">Bookmarks</h3>
+
+    @if (Model.Bookmarked_Articles.Count == 0)
+    {
+    <div class="text-center">
+        <h3 class="text-capitalize text-center">Oh dang! it looks like you haven't bookmarked any articles!</h3>
+        <a role="button" class="btn btn-primary" href="@Url.Action("Home", "Feed")"><span class="fa fa-rocket"></span>  Take Me Home!</a>
+    </div>
+    }
+    else
+    {
+        <h4 class="text-capitalize text-center text-primary">Your bookmarked articles. You've got good taste.</h4>
+        if (Model.Bookmarked_Articles.Count == 1)
+        {
+            <row class="col-lg-12">
+                <div class="col-lg-6" id="@Model.Bookmarked_Articles.First().AID">
+                    <div class="card">
+                        <a class="card-header" role="button" data-toggle="collapse" href="#view-@Model.Bookmarked_Articles.First().AID" aria-expanded="false">
+                            <div class="card-image"><img class="img-responsive" src="@Model.Bookmarked_Articles.First().URlToImage" /></div>
+                            <div class="pull-right" aria-expanded="false">
+                                <span class="fa fa-angle-down large"></span>
+                            </div> <div class="card-title h4" style="color:black;">@Model.Bookmarked_Articles.First().Title</div>
+                            <text class="text-muted pull-right">@Model.Bookmarked_Articles.First().PublishedDate</text>
+                            <text class="text-muted">@Model.Bookmarked_Articles.First().Author</text>
+                        </a>
+                        <br />
+                        <div id="view-@Model.Bookmarked_Articles.First().AID" class="collapse">
+                            <div class="container-fluid">
+                                <p class="card-text" style="color:black;">@Model.Bookmarked_Articles.First().Description</p>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="pull-left">
+                                    <div class="btn"><span class="glyphicon glyphicon-thumbs-up large text-success"></span></div>
+                                    <div class="btn"><span class="glyphicon glyphicon-thumbs-down large text-danger"></span></div>
+                                </div>
+                                <div class="pull-right">
+                                    <a role="button" class="btn btn-primary" href="@Model.Bookmarked_Articles.First().URL" target="_blank"><span class="fa fa-external-link"></span> Read</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </row>
+        }
+        else
+        {
+                foreach(var article in Model.Bookmarked_Articles)
+                {
+                        <div class="col-lg-6" id="@article.AID">
+                            <div class="card">
+                                <a class="card-header" role="button" data-toggle="collapse" href="#view-@article.AID" aria-expanded="false">
+                                    <div class="card-image"><img class="img-responsive" src="@article.URlToImage" /></div>
+                                    <div class="pull-right" aria-expanded="false">
+                                        <span class="fa fa-angle-down large"></span>
+                                    </div> <div class="card-title h4" style="color:black;">@article.Title</div>
+                                    <text class="text-muted pull-right">@article.PublishedDate</text>
+                                    <text class="text-muted">@article.SourceName</text>
+                                </a>
+                                <br />
+                                <div id="view-@article.AID" class="collapse">
+                                    <div class="container-fluid">
+                                        <p class="card-text" style="color:black;">@article.Description</p>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="pull-left">
+                                            <div class="btn"><span class="glyphicon glyphicon-thumbs-up large text-success"></span></div>
+                                            <div class="btn"><span class="glyphicon glyphicon-thumbs-down large text-danger"></span></div>
+                                        </div>
+                                        <div class="pull-right">
+                                            <a role="button" class="btn btn-primary" href="@article.URL" target="_blank"><span class="fa fa-external-link"></span> Read</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                }
+        }
+    }
+</div>
 
 <script>
     $(document).ready(function () {

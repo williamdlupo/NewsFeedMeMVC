@@ -16,7 +16,7 @@ namespace NewsFeedMe.Controllers
         private HttpClient client = new HttpClient();
 
         [HttpGet]
-        public async Task<ActionResult> Following()
+        public ActionResult Following()
         {
             ViewBag.Message = TempData["result"] as string;
 
@@ -66,7 +66,7 @@ namespace NewsFeedMe.Controllers
                 return View(following);
             }
         }
-        
+
         [HttpPost]
         public async Task<ActionResult> DeleteFollowing(DeleteFollowingModel[] deleteList)
         {
@@ -98,7 +98,7 @@ namespace NewsFeedMe.Controllers
                         await context.SaveChangesAsync();
                     }
                 }
-                
+
                 TempData["result"] = "Interests saved!";
                 return Json(new { success = true }, JsonRequestBehavior.AllowGet);
             }
@@ -107,10 +107,11 @@ namespace NewsFeedMe.Controllers
         [HttpPost]
         public async Task<ActionResult> SaveFollowing(SaveFollowingModel[] topicList)
         {
+            var authenticateResult = await HttpContext.GetOwinContext().Authentication.AuthenticateAsync("ExternalCookie");
+            long user = Convert.ToInt64(authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == "urn:twitter:userid").Value);
+
             using (var context = new EntityFramework())
             {
-                long user = context.Users.Where(x => x.ScreenName.Equals(User.Identity.Name)).Select(x => x.Id).FirstOrDefault();
-
                 if (topicList.Where(x => x.Type.Equals("category")).ToList().Count > 0)
                 {
                     int id = 0;
@@ -149,14 +150,85 @@ namespace NewsFeedMe.Controllers
             }
         }
 
+        public async Task<ActionResult> SaveBookmark(int articleID)
+        {
+            var authenticateResult = await HttpContext.GetOwinContext().Authentication.AuthenticateAsync("ExternalCookie");
+            long user = Convert.ToInt64(authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == "urn:twitter:userid").Value);
+
+            using (var context = new EntityFramework())
+            {
+                if (!articleID.Equals(""))
+                {
+                    List<Bookmarked_Article> cachedArticles = Session["Articles"] as List<Bookmarked_Article>;
+
+                    Bookmarked_Article article = new Bookmarked_Article
+                    {
+                        UserID = user,
+                        AID = articleID,
+                        Author = cachedArticles.Where(x => x.AID.Equals(articleID)).Select(x => x.Author).First(),
+                        Description = cachedArticles.Where(x => x.AID.Equals(articleID)).Select(x => x.Description).First(),
+                        PublishedDate = cachedArticles.Where(x => x.AID.Equals(articleID)).Select(x => x.PublishedDate).First(),
+                        SourceName = cachedArticles.Where(x => x.AID.Equals(articleID)).Select(x => x.SourceName).First(),
+                        Title = cachedArticles.Where(x => x.AID.Equals(articleID)).Select(x => x.Title).First(),
+                        URL = cachedArticles.Where(x => x.AID.Equals(articleID)).Select(x => x.URL).First(),
+                        URlToImage = cachedArticles.Where(x => x.AID.Equals(articleID)).Select(x => x.URlToImage).First()
+                    };
+                    context.Bookmarked_Article.Add(article);
+                    try { await context.SaveChangesAsync(); }
+                    catch { throw; }
+
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+
+                return Json(new { success = false }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult Settings()
         {
             return View();
         }
 
-        public ActionResult Bookmarks()
+        public async Task<ActionResult> Bookmarks()
         {
-            return View();
+            var authenticateResult = await HttpContext.GetOwinContext().Authentication.AuthenticateAsync("ExternalCookie");
+            long user = Convert.ToInt64(authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == "urn:twitter:userid").Value);
+
+            List<Bookmarked_Article> bookmarked_Articles = new List<Bookmarked_Article>();
+
+            using (var context = new EntityFramework())
+            {
+                BookmarkModel bookmarks = new BookmarkModel
+                {
+                    Bookmarked_Articles = (from bkmrk in context.Set<Bookmarked_Article>()
+                                           where bkmrk.UserID == user
+                                           orderby bkmrk.PublishedDate
+                                           select new
+                                           {
+                                               bkmrk.AID,
+                                               bkmrk.Author,
+                                               bkmrk.Description,
+                                               bkmrk.PublishedDate,
+                                               bkmrk.SourceName,
+                                               bkmrk.Title,
+                                               bkmrk.URL,
+                                               bkmrk.URlToImage
+                                           })
+                                          .ToList().Select(x => new Bookmarked_Article
+                                          {
+                                              AID = x.AID,
+                                              Author = x.Author,
+                                              Description = x.Description,
+                                              PublishedDate = x.PublishedDate,
+                                              SourceName = x.SourceName,
+                                              URL = x.URL,
+                                              URlToImage = x.URlToImage,
+                                              Title = x.Title
+                                          }).ToList()
+                };
+
+                return View(bookmarks);
+            }
         }
 
         //seeds the publisher table with data with NewsAPI sources

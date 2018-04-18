@@ -149,15 +149,15 @@ namespace NewsFeedMe
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DeleteUser_Publisher", userIDParameter, publisherIDParameter);
         }
     
-        public virtual int InsertBookmarked_Article(string sourceName, Nullable<long> userID, string author, string title, string description, string uRL, string uRLToImage, Nullable<System.DateTime> date)
+        public virtual int InsertBookmarked_Article(Nullable<long> userID, string sourceName, string author, string title, string description, string uRL, string uRLToImage, Nullable<System.DateTime> date)
         {
-            var sourceNameParameter = sourceName != null ?
-                new ObjectParameter("SourceName", sourceName) :
-                new ObjectParameter("SourceName", typeof(string));
-    
             var userIDParameter = userID.HasValue ?
                 new ObjectParameter("UserID", userID) :
                 new ObjectParameter("UserID", typeof(long));
+    
+            var sourceNameParameter = sourceName != null ?
+                new ObjectParameter("SourceName", sourceName) :
+                new ObjectParameter("SourceName", typeof(string));
     
             var authorParameter = author != null ?
                 new ObjectParameter("Author", author) :
@@ -183,7 +183,7 @@ namespace NewsFeedMe
                 new ObjectParameter("Date", date) :
                 new ObjectParameter("Date", typeof(System.DateTime));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertBookmarked_Article", sourceNameParameter, userIDParameter, authorParameter, titleParameter, descriptionParameter, uRLParameter, uRLToImageParameter, dateParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertBookmarked_Article", userIDParameter, sourceNameParameter, authorParameter, titleParameter, descriptionParameter, uRLParameter, uRLToImageParameter, dateParameter);
         }
     }
 }

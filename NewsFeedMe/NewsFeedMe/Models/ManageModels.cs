@@ -24,4 +24,9 @@ namespace NewsFeedMe.Models
     {
         public string Id { get; set; }
     }
+
+    public class BookmarkModel
+    {
+        public List<Bookmarked_Article> Bookmarked_Articles;
+    }
 }

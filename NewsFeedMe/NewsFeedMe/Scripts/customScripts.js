@@ -10,15 +10,20 @@
         $('#Desktop-Custom').hide();
 
         $('*#panel').removeClass('container-fluid');
+        $('*#panel').removeClass('container');
         $('#Publishers').removeClass('container-fluid');
         $('#Categories').removeClass('container-fluid');
 
         $('#body').removeClass('container');
         $('#body').removeClass('body-content');
-        
+
         $('#feedNav').addClass('navbar-fixed-bottom');
     }
     else { $('#Login-Partial').show(); }
+});
+
+$(function () {
+    var bookmarkList = [];
 
     $('#feedBtn').click(function () {
         $(this).removeClass('btn-default').addClass('btn-primary');
@@ -34,6 +39,43 @@
         $('#News').show();
         $('html, body').animate({ scrollTop: 0 }, 'fast');
     });
+    
+    $("#Mixed button").click(async function () {
+        var url = $(this).data('request-url');
+        var id = $(this).attr('id');
+
+        bookmarkList.push(id);
+
+        $('button[id^="'+id+'"]').prop("disabled", true);
+        $('button[id^="' + id + '"]').children("span").removeClass('fa-star').addClass('fa-check');
+        $('button[id^="' + id + '"]').children("span").removeClass('text-warning').addClass('text-success');
+
+        await $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                articleID: id
+            }
+        });
+    });    
+    
+    $("#News button").click(async function () {
+        var url = $(this).data('request-url');
+        var id = $(this).attr('id');
+        bookmarkList.push(id);
+
+        $('button[id^="' + id + '"]').prop("disabled", true);
+        $('button[id^="' + id + '"]').children("span").removeClass('fa-star').addClass('fa-check');
+        $('button[id^="' + id + '"]').children("span").removeClass('text-warning').addClass('text-success');
+
+        await $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                articleID: id
+            }
+        });
+    }); 
 });
 
 $(function () {
@@ -152,7 +194,7 @@ $(function () {
             deleteList = deleteList.filter(function (el) {
                 return el.Id !== id;
             });
-            
+
             $(this).css('background-color', '#30a5ff');
             $(this).children("span").removeClass('fa-exclamation').addClass('fa-times');
 
@@ -178,19 +220,19 @@ $(function () {
 
     $("#saveFollowing").click(async function () {
         var url = $(this).data('request-url');
-        
-       await $.ajax({
+
+        await $.ajax({
             url: url,
             type: 'POST',
             data: {
                 topicList: topicList
             },
-           success: function (response) {
-               if (response.success) {
-                   window.location.reload(true); 
-                   $('html, body').animate({ scrollTop: 0 }, 'fast');
-               }
-           }
+            success: function (response) {
+                if (response.success) {
+                    window.location.reload(true);
+                    $('html, body').animate({ scrollTop: 0 }, 'fast');
+                }
+            }
         });
     });
 
@@ -206,8 +248,8 @@ $(function () {
             success: function (response) {
                 if (response.success) {
                     $('html, body').animate({ scrollTop: 0 }, 'fast');
-                    window.location.reload(true);  
-                    
+                    window.location.reload(true);
+
                 }
             }
         });
@@ -217,9 +259,9 @@ $(function () {
         var query = $('#searchBar').val();
         console.log(query);
         $('*[id*=' + query + ']:visible').each(function () {
-            
+
             console.log(this);
-            
+
         });
     })
 });

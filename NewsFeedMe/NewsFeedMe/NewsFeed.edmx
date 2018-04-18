@@ -132,8 +132,8 @@
           <Parameter Name="PublisherID" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="InsertBookmarked_Article" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="SourceName" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="UserID" Type="bigint" Mode="In" />
+          <Parameter Name="SourceName" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="Author" Type="nvarchar" Mode="In" />
           <Parameter Name="Title" Type="nvarchar(max)" Mode="In" />
           <Parameter Name="Description" Type="nvarchar(max)" Mode="In" />
@@ -276,8 +276,8 @@
           </FunctionImport>
           <EntitySet Name="Bookmarked_Article" EntityType="NewsFeed.DBModel.Bookmarked_Article" />
           <FunctionImport Name="InsertBookmarked_Article">
-            <Parameter Name="SourceName" Mode="In" Type="String" />
             <Parameter Name="UserID" Mode="In" Type="Int64" />
+            <Parameter Name="SourceName" Mode="In" Type="String" />
             <Parameter Name="Author" Mode="In" Type="String" />
             <Parameter Name="Title" Mode="In" Type="String" />
             <Parameter Name="Description" Mode="In" Type="String" />
