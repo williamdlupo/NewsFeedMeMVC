@@ -16,13 +16,14 @@ namespace NewsFeedMe.Controllers
         private HttpClient client = new HttpClient();
 
         [HttpGet]
-        public ActionResult Following()
+        public async Task<ActionResult> Following()
         {
             ViewBag.Message = TempData["result"] as string;
 
             using (var context = new EntityFramework())
             {
-                long user = context.Users.Where(x => x.ScreenName.Equals(User.Identity.Name)).Select(x => x.Id).FirstOrDefault();
+                var authenticateResult = await HttpContext.GetOwinContext().Authentication.AuthenticateAsync("ExternalCookie");
+                long user = Convert.ToInt64(authenticateResult.Identity.Claims.FirstOrDefault(x => x.Type == "urn:twitter:userid").Value);
 
                 FollowingModel following = new FollowingModel
                 {
@@ -35,14 +36,14 @@ namespace NewsFeedMe.Controllers
                                        pub.Description,
                                        pub.URL
                                    }).ToList()
-                                        .Select(x => new Publisher { PID = x.PID, Name = x.Name, Description = x.Description, URL = x.URL })).ToList(),
+                                    .Select(x => new Publisher { PID = x.PID, Name = x.Name, Description = x.Description, URL = x.URL })).ToList(),
                     AllTopics = ((from top in context.Set<Category>()
                                   select new
                                   {
                                       top.CID,
                                       top.Country
                                   }).ToList()
-                                        .Select(x => new Category { CID = x.CID, Country = x.Country })).ToList(),
+                                    .Select(x => new Category { CID = x.CID, Country = x.Country })).ToList(),
                     FollowedTopics = ((from category in context.Set<Category>()
                                        where (
                                                (from subcat in context.User_Category
@@ -51,7 +52,7 @@ namespace NewsFeedMe.Controllers
                                                 .ToList())
                                       .Contains(category.ID)
                                        select category.CID)
-                                      .ToList().Select(x => new Category { CID = x })).ToList(),
+                                  .ToList().Select(x => new Category { CID = x })).ToList(),
                     FollowedSources = ((from source in context.Set<Publisher>()
                                         where (
                                                 (from subcat in context.User_Publisher
@@ -60,7 +61,7 @@ namespace NewsFeedMe.Controllers
                                                  .ToList())
                                        .Contains(source.PID)
                                         select new { source.PID, source.Name })
-                                      .ToList().Select(x => new Publisher { PID = x.PID, Name = x.Name })).ToList()
+                                  .ToList().Select(x => new Publisher { PID = x.PID, Name = x.Name })).ToList()
                 };
 
                 return View(following);
@@ -202,7 +203,7 @@ namespace NewsFeedMe.Controllers
                 {
                     Bookmarked_Articles = (from bkmrk in context.Set<Bookmarked_Article>()
                                            where bkmrk.UserID == user
-                                           orderby bkmrk.PublishedDate
+                                           orderby bkmrk.PublishedDate descending
                                            select new
                                            {
                                                bkmrk.AID,

@@ -5,10 +5,8 @@
     <title>@ViewBag.Title | NewsFeedMe</title>
 
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/customScripts")
+    @Scripts.RenderFormat("<script type=\"text/javascript\" src=\"{0}\" async></script>", "~/bundles/customScripts"))
 </head>
 
 @if (!Request.IsAuthenticated)
